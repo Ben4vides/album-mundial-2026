@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Álbum Mundial 2026 🏆 Pro Tracker</title>
+    
+    <!-- CÓDIGO DE VERIFICACIÓN Y PUBLICIDAD DE GOOGLE ADSENSE -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3922889648301106" crossorigin="anonymous"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { darkMode: 'class' }
@@ -69,12 +73,22 @@
         </div>
     </header>
 
-    <!-- CONTENEDOR DE ANUNCIOS ADSENSE (ESPACIO RESERVADO PARA MONETIZACIÓN) -->
+    <!-- CONTENEDOR DE ANUNCIOS ADSENSE REORGANIZADO -->
     <div class="max-w-5xl mx-auto px-4 mt-4">
         <div class="bg-slate-200 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-2 text-center text-[10px] text-slate-400 tracking-widest uppercase">
             Anuncio Publicitario
-            <!-- Aquí pegarás el código de AdSense cuando lo tengas -->
-            <div class="h-12 flex items-center justify-center text-slate-500 font-bold">Zona de Monetización Activa</div>
+            <div class="min-h-[60px] flex items-center justify-center text-slate-500 font-bold">
+                <!-- Bloque inyectado por AdSense -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3922889648301106"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
         </div>
     </div>
 
@@ -185,7 +199,7 @@
         let album = [];
         let currentFilter = 'todos';
         let searchQuery = '';
-        let openAccordions = {}; // Guarda qué acordeones están abiertos para no perder el estado
+        let openAccordions = {};
 
         function playClickSound(isRemove = false) {
             try {
@@ -286,30 +300,23 @@
             document.getElementById('adv-specials').innerText = `${specialsOwned}/${specials.length}`;
         }
 
-        // FILTRADO INTELIGENTE AVANZADO CON SOPORTE DE RANGOS (Ej: MEX 1-10)
         function matchesSearch(s, query) {
             if (!query) return true;
             const q = query.toLowerCase().trim();
-            
-            // Comprobar si es un rango de números (Ej: MEX 1-10 o Mexico 1-5)
             const rangeMatch = q.match(/^([a-z\s]+)\s+(\d+)-(\d+)$/);
             if (rangeMatch) {
                 const searchCountry = rangeMatch[1].trim();
                 const startNum = parseInt(rangeMatch[2]);
                 const endNum = parseInt(rangeMatch[3]);
-                
                 const countryText = s.country.toLowerCase();
                 const idText = s.id.toLowerCase();
                 const matchesCountry = countryText.includes(searchCountry) || idText.includes(searchCountry);
-                
-                // Extraer el número del cromo
                 const numExtract = s.displayNum.match(/\d+/);
                 if (numExtract && matchesCountry) {
                     const currentNum = parseInt(numExtract[0]);
                     return currentNum >= startNum && currentNum <= endNum;
                 }
             }
-            
             return s.id.toLowerCase().includes(q) || s.country.toLowerCase().includes(q) || s.groupName.toLowerCase().includes(q) || s.displayNum.toLowerCase().includes(q);
         }
 
@@ -346,7 +353,6 @@
                     const totalInSub = album.filter(s => s.country === subName).length;
 
                     const idKey = `g-${gIdx}-s-${sIdx}`;
-                    // POR DEFECTO EMPIEZAN CERRADOS SI NO SE HAN TOCADO (Mejora radical de rendimiento)
                     const isHidden = openAccordions[idKey] ? '' : 'hidden';
                     const iconRotate = openAccordions[idKey] ? 'rotate-180' : '';
 
@@ -363,7 +369,6 @@
                                 if (s.qty === 1) bg = "bg-emerald-600 text-white border-emerald-400 shadow-sm";
                                 if (s.qty > 1) bg = "bg-indigo-600 text-white border-indigo-400 shadow-md";
                                 
-                                // Aplicar estilos visuales premium según tipo
                                 let premiumClass = "";
                                 if (s.qty === 0) {
                                     if (s.type === "🛡️ Escudo") premiumClass = "border-amber-500/40 text-amber-600/70 dark:text-amber-500/60";
@@ -409,14 +414,13 @@
             const icon = document.getElementById('icon-' + id);
             if(el) {
                 const isHidden = el.classList.toggle('hidden');
-                openAccordions[id] = !isHidden; // Recordar estado
+                openAccordions[id] = !isHidden;
             }
             if(icon) icon.classList.toggle('rotate-180');
         }
 
         window.handleSearch = function() { 
             searchQuery = document.getElementById('search-input').value; 
-            // Si el usuario escribe algo, forzamos abrir acordeones para que vea los resultados directo
             if(searchQuery.length > 1) { album.forEach((_, i) => { openAccordions[`g-${i}-s-0`] = true; openAccordions[`g-${i}-s-1`] = true; openAccordions[`g-${i}-s-2`] = true; openAccordions[`g-${i}-s-3`] = true; }); }
             renderAlbum(); 
         }
@@ -439,7 +443,6 @@
             document.getElementById('theme-icon').innerText = isDark ? "☀️" : "🌙";
         }
 
-        // BUSCADOR AUTOMÁTICO DE INTERCAMBIOS (MATCH)
         window.checkMatchIntercambio = function() {
             const rawText = document.getElementById('friend-reps-input').value.toLowerCase();
             const resultsDiv = document.getElementById('match-results');
@@ -449,7 +452,6 @@
             let matchesEncontrados = [];
 
             missing.forEach(s => {
-                // Buscamos si la sigla o número del faltante aparece limpio en el mensaje de tu amigo
                 const cleanLabel = s.displayNum.toLowerCase().replace("🛡️ ", "").replace("✨ ", "");
                 if(rawText.includes(cleanLabel) && (rawText.includes(s.country.toLowerCase()) || rawText.includes(s.id.split('-')[0].toLowerCase()))) {
                     matchesEncontrados.push(`${s.country}: ${s.displayNum}`);

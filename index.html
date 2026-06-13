@@ -5,28 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Álbum Mundial 2026 🏆 Pro Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <style>
         .sticker-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* Animación suave para cambio de tema */
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
     </style>
 </head>
-<body class="bg-slate-900 font-sans min-h-screen text-slate-100 pb-16">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-24 dark">
 
-    <!-- HEADER / DASHBOARD PRINCIPAL -->
-    <header class="bg-gradient-to-r from-indigo-950 via-blue-900 to-slate-950 text-white shadow-2xl sticky top-0 z-50 border-b border-blue-800/40">
+    <button onclick="toggleTheme()" class="fixed bottom-6 right-6 z-50 bg-amber-400 dark:bg-slate-800 text-slate-950 dark:text-amber-400 p-3.5 rounded-full shadow-2xl border-2 border-slate-950 dark:border-amber-400 font-bold text-lg hover:scale-110 transition active:scale-95">
+        <span id="theme-icon">☀️</span>
+    </button>
+
+    <header class="bg-gradient-to-r from-indigo-950 via-blue-900 to-slate-950 text-white shadow-2xl sticky top-0 z-40 border-b border-blue-800/40">
         <div class="max-w-5xl mx-auto px-4 py-4">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
                 <div>
                     <h1 class="text-xl md:text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-200 to-emerald-400 uppercase">
                         🏆 Álbum Mundial 2026 Pro
                     </h1>
-                    <p class="text-xs text-blue-300 font-medium">Organización Oficial por Grupos y Especiales</p>
+                    <p class="text-xs text-blue-300 font-medium">Edición Máxima Autoguardable</p>
                 </div>
                 
-                <div class="flex flex-wrap gap-2 w-full md:w-auto">
-                    <button onclick="shareMissing()" class="flex-1 md:flex-none bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition shadow-lg flex items-center justify-center gap-1.5">📋 Faltantes</button>
-                    <button onclick="shareRepeated()" class="flex-1 md:flex-none bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold px-3 py-2 rounded-xl transition shadow-lg flex items-center justify-center gap-1.5">🔄 Repetidas</button>
-                    <button onclick="document.getElementById('file-import').click()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition border border-slate-700">📥 Importar</button>
-                    <button onclick="exportBackup()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition border border-slate-700">📤 Exportar</button>
+                <div class="flex flex-wrap gap-1.5 w-full md:w-auto text-xs font-bold">
+                    <button onclick="shareMissing()" class="flex-1 md:flex-none bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-2 rounded-xl transition shadow-md">📋 Faltantes</button>
+                    <button onclick="shareRepeated()" class="flex-1 md:flex-none bg-amber-500 hover:bg-amber-600 text-slate-950 px-2.5 py-2 rounded-xl transition shadow-md">🔄 Repes</button>
+                    <button onclick="document.getElementById('file-import').click()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-2 rounded-xl transition border border-slate-700">📥 Importar</button>
+                    <button onclick="exportBackup()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-2 rounded-xl transition border border-slate-700">📤 Exportar</button>
+                    <button onclick="dangerReset()" class="bg-red-950/80 hover:bg-red-900 text-red-400 px-2.5 py-2 rounded-xl transition border border-red-800/50">🗑️ Reset</button>
                     <input type="file" id="file-import" accept=".json" class="hidden" onchange="importBackup(event)">
                 </div>
             </div>
@@ -36,51 +47,76 @@
             </div>
 
             <div class="grid grid-cols-4 gap-2 text-center text-xs md:text-sm">
-                <div class="bg-slate-950/60 rounded-xl p-2.5 border border-slate-800/80">
+                <div class="bg-slate-950/60 rounded-xl p-2 border border-slate-800/80">
                     <p class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Pegados</p>
-                    <p id="stat-owned" class="text-lg md:text-2xl font-black text-emerald-400">0</p>
+                    <p id="stat-owned" class="text-base md:text-xl font-black text-emerald-400">0</p>
                 </div>
-                <div class="bg-slate-950/60 rounded-xl p-2.5 border border-slate-800/80">
+                <div class="bg-slate-950/60 rounded-xl p-2 border border-slate-800/80">
                     <p class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Faltan</p>
-                    <p id="stat-missing" class="text-lg md:text-2xl font-black text-rose-400">0</p>
+                    <p id="stat-missing" class="text-base md:text-xl font-black text-rose-400">0</p>
                 </div>
-                <div class="bg-slate-950/60 rounded-xl p-2.5 border border-slate-800/80">
+                <div class="bg-slate-950/60 rounded-xl p-2 border border-slate-800/80">
                     <p class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Repetidas</p>
-                    <p id="stat-repeated" class="text-lg md:text-2xl font-black text-amber-400">0</p>
+                    <p id="stat-repeated" class="text-base md:text-xl font-black text-amber-400">0</p>
                 </div>
-                <div class="bg-slate-950/60 rounded-xl p-2.5 border border-slate-800/80">
+                <div class="bg-slate-950/60 rounded-xl p-2 border border-slate-800/80">
                     <p class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Progreso</p>
-                    <p id="stat-pct" class="text-lg md:text-2xl font-black text-cyan-400">0%</p>
+                    <p id="stat-pct" class="text-base md:text-xl font-black text-cyan-400">0%</p>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- FILTROS Y BUSCADOR -->
-    <main class="max-w-5xl mx-auto px-4 mt-6">
-        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/60 shadow-xl mb-6 space-y-3">
+    <section class="max-w-5xl mx-auto px-4 mt-4">
+        <details class="bg-slate-800/40 dark:bg-slate-800/40 bg-slate-200 border border-slate-300 dark:border-slate-800 rounded-xl overflow-hidden text-xs">
+            <summary class="p-3 font-bold text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-300/40 dark:hover:bg-slate-950/40 transition flex justify-between items-center">
+                📊 Ver Reporte de Análisis Avanzado (Grupos y Especiales)
+            </summary>
+            <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/30">
+                <div>
+                    <span class="text-slate-500 font-bold block mb-1 uppercase tracking-wider text-[10px]">🔥 Líder de Colección</span>
+                    <p id="adv-best-group" class="text-sm font-black text-amber-500">Calculando...</p>
+                </div>
+                <div>
+                    <span class="text-slate-500 font-bold block mb-1 uppercase tracking-wider text-[10px]">🛡️ Estado de Escudos</span>
+                    <p id="adv-shields" class="text-sm font-black text-emerald-500">Calculando...</p>
+                </div>
+                <div>
+                    <span class="text-slate-500 font-bold block mb-1 uppercase tracking-wider text-[10px]">✨ Estado de Especiales</span>
+                    <p id="adv-specials" class="text-sm font-black text-indigo-400">Calculando...</p>
+                </div>
+            </div>
+        </details>
+    </section>
+
+    <main class="max-w-5xl mx-auto px-4 mt-4">
+        <div class="bg-slate-200 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-300 dark:border-slate-700/60 shadow-xl mb-4 space-y-3">
             <div class="relative">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">🔍</span>
                 <input type="text" id="search-input" oninput="handleSearch()" placeholder="Buscar por sigla, número, país o grupo... (Ej: MEX 13, CC, FWC 5)" 
-                    class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
             
-            <div class="flex flex-wrap bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1">
-                <button id="btn-todos" onclick="setFilter('todos')" class="filter-btn flex-1 py-2 text-xs md:text-sm font-bold rounded-lg bg-blue-600 text-white shadow-md">Todos los Cromos</button>
-                <button id="btn-faltantes" onclick="setFilter('faltantes')" class="filter-btn flex-1 py-2 text-xs md:text-sm font-bold rounded-lg text-slate-400 hover:text-white">Sólo Faltantes</button>
-                <button id="btn-repetidos" onclick="setFilter('repetidos')" class="filter-btn flex-1 py-2 text-xs md:text-sm font-bold rounded-lg text-slate-400 hover:text-white">Sólo Repetidas</button>
+            <div class="flex flex-col sm:flex-row gap-2">
+                <div class="flex-1 flex flex-wrap bg-white dark:bg-slate-950 p-1 rounded-xl border border-slate-300 dark:border-slate-800 gap-1">
+                    <button id="btn-todos" onclick="setFilter('todos')" class="filter-btn flex-1 py-1.5 text-xs font-bold rounded-lg bg-blue-600 text-white shadow-md">Todos</button>
+                    <button id="btn-faltantes" onclick="setFilter('faltantes')" class="filter-btn flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400">Faltantes</button>
+                    <button id="btn-repetidos" onclick="setFilter('repetidos')" class="filter-btn flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400">Repes</button>
+                    <button id="btn-escudos" onclick="setFilter('escudos')" class="filter-btn flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400">🛡️ Escudos</button>
+                    <button id="btn-especiales" onclick="setFilter('especiales')" class="filter-btn flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400">✨ Extras</button>
+                </div>
+                <select id="group-jumper" onchange="jumpToSection()" class="bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-xl px-3 py-1.5 text-xs font-bold focus:outline-none">
+                    <option value="">⚡ Saltar a Sección...</option>
+                </select>
             </div>
         </div>
 
-        <!-- CONTENEDOR DE GRUPOS Y SECCIONES -->
-        <div id="countries-container" class="space-y-6">
-            <!-- JavaScript inyectará los bloques aquí -->
-        </div>
+        <div id="countries-container" class="space-y-4">
+            </div>
     </main>
 
     <script>
-        // Nueva versión de la llave para asegurar que limpie errores previos en caché
-        const STORAGE_KEY = 'album_mundial_2026_global_v5';
+        const STORAGE_KEY = 'album_mundial_2026_global_v7_ultimate';
 
         const tournamentGroups = [
             { name: "Sección Inicial ✨", isSpecial: true, parts: [
@@ -100,7 +136,7 @@
                 { name: "USA", code: "USA" }, { name: "Paraguay", code: "PAR" }, { name: "Austria", code: "AUT" }, { name: "Turkiye", code: "TUR" }
             ]},
             { name: "Grupo E", teams: [
-                { name: "Germany", code: "GER" }, { name: "Curaçao", code: "CUW" }, { name: "Cote d'Ivoire", code: "CIV" }, { name: "Ecuador", code: "ECU" }
+                { name: "Germany", code: "GER" }, { name: "Curaçao", code: "CUW" }, { name: "Cote d Ivoire", code: "CIV" }, { name: "Ecuador", code: "ECU" }
             ]},
             { name: "Grupo F", teams: [
                 { name: "Netherlands", code: "NED" }, { name: "Japan", code: "JPN" }, { name: "Sweden", code: "SWE" }, { name: "Tunisia", code: "TUN" }
@@ -132,53 +168,70 @@
         let currentFilter = 'todos';
         let searchQuery = '';
 
+        // Sistema de Sonido Digital Sintetizado (Sin archivos externos de audio)
+        function playClickSound(isRemove = false) {
+            try {
+                // Activar vibración háptica nativa en celulares
+                if (navigator.vibrate) navigator.vibrate(isRemove ? 25 : 12);
+                
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(isRemove ? 180 : 520, ctx.currentTime);
+                gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.08);
+            } catch(e) {}
+        }
+
         function initAlbum() {
+            // Inicializar combo de salto rápido
+            const jumper = document.getElementById('group-jumper');
+            tournamentGroups.forEach(g => {
+                const opt = document.createElement('option');
+                opt.value = g.name; opt.innerText = g.name; jumper.appendChild(opt);
+            });
+
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 album = JSON.parse(saved);
             } else {
-                tournamentGroups.forEach(group => {
-                    if (group.isSpecial) {
-                        group.parts.forEach(part => {
-                            part.list.forEach(itemLabel => {
-                                album.push({
-                                    id: itemLabel,
-                                    groupName: group.name,
-                                    country: part.id,
-                                    displayNum: itemLabel,
-                                    type: "⭐ Especial",
-                                    qty: 0
-                                });
+                forceResetData();
+            }
+        }
+
+        function forceResetData() {
+            album = [];
+            tournamentGroups.forEach(group => {
+                if (group.isSpecial) {
+                    group.parts.forEach(part => {
+                        part.list.forEach(itemLabel => {
+                            album.push({
+                                id: itemLabel, groupName: group.name, country: part.id, displayNum: itemLabel, type: "⭐ Especial", qty: 0
                             });
                         });
-                    } else {
-                        group.teams.forEach(team => {
-                            for (let i = 1; i <= 20; i++) {
-                                let displayLabel = i.toString();
-                                let type = "🏃 Jugador";
+                    });
+                } else {
+                    group.teams.forEach(team => {
+                        const safeCountryId = team.name.replace(/[^a-zA-Z0-9]/g, "");
+                        for (let i = 1; i <= 20; i++) {
+                            let displayLabel = i.toString();
+                            let type = "🏃 Jugador";
+                            if (i === 1) { displayLabel = "🛡️ Escudo"; type = "🛡️ Escudo"; }
+                            else if (i === 13) { displayLabel = `${team.code} 13`; type = "✨ Extra"; }
 
-                                if (i === 1) {
-                                    displayLabel = "🛡️ Escudo";
-                                    type = "🛡️ Escudo";
-                                } else if (i === 13) {
-                                    displayLabel = `${team.code} 13`;
-                                    type = "✨ Extra";
-                                }
-
-                                album.push({
-                                    id: `${team.name}-${i}`,
-                                    groupName: group.name,
-                                    country: team.name,
-                                    displayNum: displayLabel,
-                                    type: type,
-                                    qty: 0
-                                });
-                            }
-                        });
-                    }
-                });
-                saveAlbum();
-            }
+                            album.push({
+                                id: `${safeCountryId}-${i}`, groupName: group.name, country: team.name, displayNum: displayLabel, type: type, qty: 0
+                            });
+                        }
+                    });
+                }
+            });
+            saveAlbum();
         }
 
         function saveAlbum() { localStorage.setItem(STORAGE_KEY, JSON.stringify(album)); }
@@ -187,8 +240,7 @@
             const total = album.length;
             const owned = album.filter(s => s.qty >= 1).length;
             const missing = total - owned;
-            let repeated = 0;
-            album.forEach(s => { if (s.qty > 1) repeated += (s.qty - 1); });
+            let repeated = 0; album.forEach(s => { if (s.qty > 1) repeated += (s.qty - 1); });
             const pct = total > 0 ? ((owned / total) * 100).toFixed(1) : 0;
 
             document.getElementById('stat-owned').innerText = owned;
@@ -196,6 +248,27 @@
             document.getElementById('stat-repeated').innerText = repeated;
             document.getElementById('stat-pct').innerText = `${pct}%`;
             document.getElementById('progress-bar').style.width = `${pct}%`;
+
+            // Reportes Avanzados
+            // 1. Mejor grupo
+            let bestGroup = "Ninguno", maxPct = -1;
+            tournamentGroups.forEach(g => {
+                const gStickers = album.filter(s => s.groupName === g.name);
+                const gOwned = gStickers.filter(s => s.qty >= 1).length;
+                const gPct = (gOwned / gStickers.length) * 100;
+                if(gPct > maxPct) { maxPct = gPct; bestGroup = g.name; }
+            });
+            document.getElementById('adv-best-group').innerText = `${bestGroup} (${maxPct.toFixed(0)}%)`;
+
+            // 2. Escudos
+            const shields = album.filter(s => s.type === "🛡️ Escudo");
+            const shieldsOwned = shields.filter(s => s.qty >= 1).length;
+            document.getElementById('adv-shields').innerText = `${shieldsOwned} de ${shields.length} (${shields.length - shieldsOwned} faltan)`;
+
+            // 3. Especiales/Extras
+            const specials = album.filter(s => s.type === "✨ Extra" || s.type === "⭐ Especial");
+            const specialsOwned = specials.filter(s => s.qty >= 1).length;
+            document.getElementById('adv-specials').innerText = `${specialsOwned} de ${specials.length} pegados`;
         }
 
         function renderAlbum() {
@@ -212,17 +285,20 @@
                     }
                     if (currentFilter === 'faltantes') return s.qty === 0;
                     if (currentFilter === 'repetidos') return s.qty > 1;
+                    if (currentFilter === 'escudos') return s.type === "🛡️ Escudo";
+                    if (currentFilter === 'especiales') return (s.type === "✨ Extra" || s.type === "⭐ Especial");
                     return true;
                 });
 
                 if (visibleStickers.length === 0) return;
 
                 const groupBlock = document.createElement('div');
-                groupBlock.className = "bg-slate-800/60 p-4 rounded-2xl border border-slate-700/50";
-                groupBlock.innerHTML = `<h2 class="text-lg font-black text-amber-400 mb-3 tracking-wide uppercase border-b border-slate-700/60 pb-1">📍 ${group.name}</h2>`;
+                groupBlock.id = `sec-${group.name.replace(/\s+/g, '')}`;
+                groupBlock.className = "bg-white dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-300 dark:border-slate-700/50 shadow-sm";
+                groupBlock.innerHTML = `<h2 class="text-sm font-black text-blue-700 dark:text-amber-400 mb-3 tracking-wide uppercase border-b border-slate-200 dark:border-slate-700/60 pb-1">📍 ${group.name}</h2>`;
 
                 const sectionsContainer = document.createElement('div');
-                sectionsContainer.className = "space-y-3";
+                sectionsContainer.className = "space-y-2.5";
 
                 const subCategories = [...new Set(visibleStickers.map(s => s.country))];
 
@@ -233,28 +309,27 @@
 
                     const idKey = `g-${gIdx}-s-${sIdx}`;
                     const card = document.createElement('div');
-                    card.className = "bg-slate-950/40 rounded-xl border border-slate-800 overflow-hidden";
+                    card.className = "bg-slate-100 dark:bg-slate-950/40 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden";
                     card.innerHTML = `
-                        <button onclick="toggleAccordion('${idKey}')" class="w-full flex justify-between items-center p-3 bg-slate-950/60 hover:bg-slate-950 font-bold text-sm text-slate-300">
-                            <span>🏳️‍🌈 ${subName} <span class="text-xs ml-2 text-slate-500">(${ownedInSub}/${totalInSub})</span></span>
-                            <svg id="icon-${idKey}" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                        <button onclick="toggleAccordion('${idKey}')" class="w-full flex justify-between items-center p-2.5 bg-slate-200/60 dark:bg-slate-950/60 hover:bg-slate-300 dark:hover:bg-slate-950 font-bold text-xs text-slate-700 dark:text-slate-300 transition">
+                            <span>🏳️‍🌈 ${subName} <span class="text-[10px] ml-1.5 opacity-60">(${ownedInSub}/${totalInSub})</span></span>
+                            <svg id="icon-${idKey}" class="w-3.5 h-3.5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
-                        <div id="content-${idKey}" class="p-3 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-10 gap-2">
+                        <div id="content-${idKey}" class="p-3 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-10 gap-1.5">
                             ${subStickers.map(s => {
-                                let bg = "bg-slate-900 text-slate-500 border-slate-800";
-                                let badge = "";
-                                if (s.qty === 1) bg = "bg-emerald-600 text-white border-emerald-400 shadow-md";
-                                if (s.qty > 1) {
-                                    bg = "bg-indigo-600 text-white border-indigo-400 shadow-lg";
-                                    badge = `<span class="absolute -top-1 -right-1 bg-amber-400 text-slate-950 text-[9px] px-1 font-black rounded font-mono">+${s.qty - 1}</span>`;
-                                }
+                                let bg = "bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-800";
+                                if (s.qty === 1) bg = "bg-emerald-600 text-white border-emerald-400 shadow-sm";
+                                if (s.qty > 1) bg = "bg-indigo-600 text-white border-indigo-400 shadow-md";
+                                
+                                const badge = s.qty > 1 ? `<span class="absolute -top-1 -right-1 bg-amber-400 text-slate-950 text-[9px] px-1 font-black rounded">+${s.qty - 1}</span>` : '';
+                                
                                 return `
                                     <div onclick="adjustQty('${s.id}', 1)" oncontextmenu="event.preventDefault(); adjustQty('${s.id}', -1)"
-                                         class="sticker-card aspect-square relative flex flex-col items-center justify-center rounded-lg font-bold text-xs p-1 cursor-pointer border active:scale-95 ${bg}">
+                                         class="sticker-card aspect-square relative flex flex-col items-center justify-center rounded-lg font-bold text-[11px] p-1 cursor-pointer border active:scale-95 ${bg}">
                                         ${badge}
-                                        <span class="text-[11px] font-black text-center leading-tight px-0.5">${s.displayNum}</span>
-                                        <span class="text-[7px] opacity-50 text-center truncate w-full mt-0.5">${s.type}</span>
-                                        ${s.qty > 0 ? `<div onclick="event.stopPropagation(); adjustQty('${s.id}', -1)" class="absolute bottom-0.5 right-1 text-[9px] bg-black/40 w-3.5 h-3.5 flex items-center justify-center rounded-full border border-white/10">-</div>` : ''}
+                                        <span class="font-black text-center leading-tight px-0.5">${s.displayNum}</span>
+                                        <span class="text-[7px] opacity-40 text-center truncate w-full mt-0.5">${s.type}</span>
+                                        ${s.qty > 0 ? `<div onclick="event.stopPropagation(); adjustQty('${s.id}', -1)" class="absolute bottom-0.5 right-1 text-[9px] bg-black/40 hover:bg-black w-3.5 h-3.5 flex items-center justify-center rounded-full text-white">-</div>` : ''}
                                     </div>
                                 `;
                             }).join('')}
@@ -271,7 +346,12 @@
 
         function adjustQty(id, change) {
             const s = album.find(x => x.id === id);
-            if (s) { s.qty = Math.max(0, s.qty + change); saveAlbum(); renderAlbum(); }
+            if (s) { 
+                s.qty = Math.max(0, s.qty + change); 
+                playClickSound(change < 0);
+                saveAlbum(); 
+                renderAlbum(); 
+            }
         }
 
         window.toggleAccordion = function(id) {
@@ -282,11 +362,33 @@
         }
 
         window.handleSearch = function() { searchQuery = document.getElementById('search-input').value; renderAlbum(); }
+        
         window.setFilter = function(f) {
             currentFilter = f;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
             document.getElementById(`btn-${f}`).classList.add('bg-blue-600', 'text-white');
             renderAlbum();
+        }
+
+        window.jumpToSection = function() {
+            const val = document.getElementById('group-jumper').value;
+            if(!val) return;
+            const target = document.getElementById(`sec-${val.replace(/\s+/g, '')}`);
+            if(target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        window.toggleTheme = function() {
+            const isDark = document.body.classList.toggle('dark');
+            document.getElementById('theme-icon').innerText = isDark ? "☀️" : "🌙";
+        }
+
+        window.dangerReset = function() {
+            const confirmWord = prompt("⚠️ ALERTA: Esto borrará todo tu progreso local. Si estás seguro, escribe la palabra REINICIAR abajo:");
+            if(confirmWord === "REINICIAR") {
+                forceResetData();
+                renderAlbum();
+                alert("Álbum puesto a cero con éxito.");
+            }
         }
 
         window.shareMissing = function() {
@@ -303,7 +405,7 @@
                     text += "\n";
                 }
             });
-            navigator.clipboard.writeText(text).then(() => alert("¡Faltantes copiados!"));
+            navigator.clipboard.writeText(text).then(() => alert("📋 ¡Lista de Faltantes copiada al portapapeles!"));
         }
 
         window.shareRepeated = function() {
@@ -320,12 +422,20 @@
                     text += "\n";
                 }
             });
-            navigator.clipboard.writeText(text).then(() => alert("¡Repetidas copiadas!"));
+            navigator.clipboard.writeText(text).then(() => alert("🔄 ¡Lista de Repetidas copiada al portapapeles!"));
         }
 
         window.exportBackup = function() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(album));
-            const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "respaldo_album.json"); dl.click();
+            const dataStr = JSON.stringify(album, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const dl = document.createElement('a');
+            dl.href = url;
+            dl.download = "respaldo_album_2026.json";
+            document.body.appendChild(dl);
+            dl.click();
+            document.body.removeChild(dl);
+            URL.revokeObjectURL(url);
         }
 
         window.importBackup = function(e) {
@@ -333,8 +443,8 @@
             const reader = new FileReader();
             reader.onload = function(evt) {
                 try {
-                    album = JSON.parse(evt.target.result); saveAlbum(); renderAlbum(); alert("¡Datos cargados con éxito!");
-                } catch { alert("Archivo inválido"); }
+                    album = JSON.parse(evt.target.result); saveAlbum(); renderAlbum(); alert("¡Tu progreso se cargó con éxito! 🏆");
+                } catch { alert("Archivo de respaldo inválido"); }
             };
             reader.readAsText(file);
         }

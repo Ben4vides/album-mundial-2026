@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Álbum Mundial 2026 🏆 Pro Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sticker-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-900 font-sans min-h-screen text-slate-100 pb-16">
+
+    <!-- HEADER / DASHBOARD PRINCIPAL -->
+    <header class="bg-gradient-to-r from-indigo-950 via-blue-900 to-slate-950 text-white shadow-2xl sticky top-0 z-50 border-b border-blue-800/40">
+        <div class="max-w-5xl mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                <div>
+                    <h1 class="text-xl md:text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-200 to-emerald-400 uppercase">
+                        🏆 Álbum Mundial 2026 Pro
+                    </h1>
+                    <p class="text-xs text-blue-300 font-medium">Organización Oficial por Grupos y Especiales</p>
+                </div>
+                
+                <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                    <button onclick="shareMissing()" class="flex-1 md:flex-none bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition shadow-lg flex items-center justify-center gap-1.5">📋 Faltantes</button>
+                    <button onclick="shareRepeated()" class="flex-1 md:flex-none bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold px-3 py-2 rounded-xl transition shadow-lg flex items-center justify-center gap-1.5">🔄 Repetidas</button>
+                    <button onclick="document.getElementById('file-import').click()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition border border-slate-700">📥 Importar</button>
+                    <button onclick="exportBackup()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition border border-slate-700">📤 Exportar</button>
+                    <input type="file" id="file-import" accept=".json" class="hidden" onchange="importBackup(event)">
+                </div>
+            </div>
+            
+            <div class="bg-slate-950/80 rounded-full h-4 w-full overflow-hidden p-0.5 border border-blue-500/20 mb-4">
+                <div id="progress-bar" class="bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2 text-center text-xs md:text-sm">
+                <div class="bg-slate-950/60 rounded-xl p-2.5 border border-slate-800/80">
+                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Pegados</p>
+                    <p id="stat-owned" class="text-lg md:text-2xl font-black text-emerald-400">0</p>
+                </div>
+                <div class="bg-slate-950/60 rounded-xl p-2.5 border border-slate-800/80">
+                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Faltan</p>
+                    <p id="stat-missing" class="text-lg md:text-2xl font-black text-rose-400">0</p>
+                </div>
+                <div class="bg-slate-950/60 rounded-xl p-2.5 border border-slate-800/80">
+                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Repetidas</p>
+                    <p id="stat-repeated" class="text-lg md:text-2xl font-black text-amber-400">0</p>
+                </div>
+                <div class="bg-slate-950/60 rounded-xl p-2.5 border border-slate-800/80">
+                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Progreso</p>
+                    <p id="stat-pct" class="text-lg md:text-2xl font-black text-cyan-400">0%</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- FILTROS Y BUSCADOR -->
+    <main class="max-w-5xl mx-auto px-4 mt-6">
+        <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/60 shadow-xl mb-6 space-y-3">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">🔍</span>
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="Buscar por sigla, número, país o grupo... (Ej: MEX 13, CC, FWC 5)" 
+                    class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div class="flex flex-wrap bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1">
+                <button id="btn-todos" onclick="setFilter('todos')" class="filter-btn flex-1 py-2 text-xs md:text-sm font-bold rounded-lg bg-blue-600 text-white shadow-md">Todos los Cromos</button>
+                <button id="btn-faltantes" onclick="setFilter('faltantes')" class="filter-btn flex-1 py-2 text-xs md:text-sm font-bold rounded-lg text-slate-400 hover:text-white">Sólo Faltantes</button>
+                <button id="btn-repetidos" onclick="setFilter('repetidos')" class="filter-btn flex-1 py-2 text-xs md:text-sm font-bold rounded-lg text-slate-400 hover:text-white">Sólo Repetidas</button>
+            </div>
+        </div>
+
+        <!-- CONTENEDOR DE GRUPOS Y SECCIONES -->
+        <div id="countries-container" class="space-y-6">
+            <!-- JavaScript inyectará los bloques aquí -->
+        </div>
+    </main>
+
+    <script>
+        // Clave única global para evitar que se pisen los datos en celulares externos
+        const STORAGE_KEY = 'album_mundial_2026_global_v3';
+
+        // Estructura oficial con nombres de países y sus siglas correspondientes
+        const tournamentGroups = [
+            { name: "Sección Inicial ✨", isSpecial: true, parts: [
+                { id: "00", list: ["00"] },
+                { id: "FWC", list: Array.from({length: 19}, (_, i) => `FWC ${i + 1}`) }
+            ]},
+            { name: "Grupo A", teams: [
+                { name: "Mexico", code: "MEX" }, { name: "South Africa", code: "RSA" }, { name: "Korea Republic", code: "KOR" }, { name: "Czechia", code: "CZE" }
+            ]},
+            { name: "Grupo B", teams: [
+                { name: "Canada", code: "CAN" }, { name: "Bosnia", code: "BIH" }, { name: "Qatar", code: "QAT" }, { name: "Switzerland", code: "SUI" }
+            ]},
+            { name: "Grupo C", teams: [
+                { name: "Brasil", code: "BRA" }, { name: "Morocco", code: "MAR" }, { name: "Haiti", code: "HAI" }, { name: "Scotland", code: "SCO" }
+            ]},
+            { name: "Grupo D", teams: [
+                { name: "USA", code: "USA" }, { name: "Paraguay", code: "PAR" }, { name: "Austria", code: "AUT" }, { name: "Turkiye", code: "TUR" }
+            ]},
+            { name: "Grupo E", teams: [
+                { name: "Germany", code: "GER" }, { name: "Curaçao", code: "CUW" }, { name: "Cote d'Ivoire", code: "CIV" }, { name: "Ecuador", code: "ECU" }
+            ]},
+            { name: "Grupo F", teams: [
+                { name: "Netherlands", code: "NED" }, { name: "Japan", code: "JPN" }, { name: "Sweden", code: "SWE" }, { name: "Tunisia", code: "TUN" }
+            ]},
+            { name: "Grupo G", teams: [
+                { name: "Belgium", code: "BEL" }, { name: "Egypt", code: "EGY" }, { name: "IR Iran", code: "IRN" }, { name: "New Zealand", code: "NZL" }
+            ]},
+            { name: "Grupo H", teams: [
+                { name: "Spain", code: "ESP" }, { name: "Cabo Verde", code: "CPV" }, { name: "Saudi Arabia", code: "KSA" }, { name: "Uruguay", code: "URU" }
+            ]},
+            { name: "Grupo I", teams: [
+                { name: "France", code: "FRA" }, { name: "Senegal", code: "SEN" }, { name: "Iraq", code: "IRQ" }, { name: "Norway", code: "NOR" }
+            ]},
+            { name: "Grupo J", teams: [
+                { name: "Argentina", code: "ARG" }, { name: "Algeria", code: "ALG" }, { name: "Austria", code: "AUT" }, { name: "Jordan", code: "JOR" }
+            ]},
+            { name: "Grupo K", teams: [
+                { name: "Portugal", code: "POR" }, { name: "Congo DR", code: "COD" }, { name: "Uzbekistan", code: "UZB" }, { name: "Colombia", code: "COL" }
+            ]},
+            { name: "Grupo L", teams: [
+                { name: "England", code: "ENG" }, { name: "Croatia", code: "CRO" }, { name: "Ghana", code: "GHA" }, { name: "Panama", code: "PAN" }
+            ]},
+            { name: "Sección Final 🥤", isSpecial: true, parts: [
+                { id: "Coca-Cola", list: Array.from({length: 14}, (_, i) => `CC ${i + 1}`) }
+            ]}
+        ];
+
+        let album = [];
+        let currentFilter = 'todos';
+        let searchQuery = '';
+
+        function initAlbum() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                album = JSON.parse(saved);
+            } else {
+                tournamentGroups.forEach(group => {
+                    if (group.isSpecial) {
+                        group.parts.forEach(part => {
+                            part.list.forEach(itemLabel => {
+                                album.push({
+                                    id: itemLabel,
+                                    groupName: group.name,
+                                    country: part.id,
+                                    displayNum: itemLabel,
+                                    type: "⭐ Especial",
+                                    qty: 0
+                                });
+                            });
+                        });
+                    } else {
+                        group.teams.forEach(team => {
+                            for (let i = 1; i <= 20; i++) {
+                                let displayLabel = i.toString();
+                                let type = "🏃 Jugador";
+
+                                if (i === 1) {
+                                    displayLabel = "🛡️ Escudo";
+                                    type = "🛡️ Escudo";
+                                } else if (i === 20) {
+                                    displayLabel = `${team.code} 13`;
+                                    type = "✨ Extra";
+                                }
+
+                                album.push({
+                                    id: `${team.name}-${i}`,
+                                    groupName: group.name,
+                                    country: team.name,
+                                    displayNum: displayLabel,
+                                    type: type,
+                                    qty: 0
+                                });
+                            }
+                        });
+                    }
+                });
+                saveAlbum();
+            }
+        }
+
+        function saveAlbum() { localStorage.setItem(STORAGE_KEY, JSON.stringify(album)); }
+
+        function updateStats() {
+            const total = album.length;
+            const owned = album.filter(s => s.qty >= 1).length;
+            const missing = total - owned;
+            let repeated = 0;
+            album.forEach(s => { if (s.qty > 1) repeated += (s.qty - 1); });
+            const pct = total > 0 ? ((owned / total) * 100).toFixed(1) : 0;
+
+            document.getElementById('stat-owned').innerText = owned;
+            document.getElementById('stat-missing').innerText = missing;
+            document.getElementById('stat-repeated').innerText = repeated;
+            document.getElementById('stat-pct').innerText = `${pct}%`;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        }
+
+        function renderAlbum() {
+            const container = document.getElementById('countries-container');
+            container.innerHTML = '';
+
+            tournamentGroups.forEach((group, gIdx) => {
+                const groupStickers = album.filter(s => s.groupName === group.name);
+                
+                const visibleStickers = groupStickers.filter(s => {
+                    if (searchQuery) {
+                        const q = searchQuery.toLowerCase();
+                        return s.id.toLowerCase().includes(q) || s.country.toLowerCase().includes(q) || s.groupName.toLowerCase().includes(q) || s.displayNum.toLowerCase().includes(q);
+                    }
+                    if (currentFilter === 'faltantes') return s.qty === 0;
+                    if (currentFilter === 'repetidos') return s.qty > 1;
+                    return true;
+                });
+
+                if (visibleStickers.length === 0) return;
+
+                const groupBlock = document.createElement('div');
+                groupBlock.className = "bg-slate-800/60 p-4 rounded-2xl border border-slate-700/50";
+                groupBlock.innerHTML = `<h2 class="text-lg font-black text-amber-400 mb-3 tracking-wide uppercase border-b border-slate-700/60 pb-1">📍 ${group.name}</h2>`;
+
+                const sectionsContainer = document.createElement('div');
+                sectionsContainer.className = "space-y-3";
+
+                const subCategories = [...new Set(visibleStickers.map(s => s.country))];
+
+                subCategories.forEach((subName, sIdx) => {
+                    const subStickers = visibleStickers.filter(s => s.country === subName);
+                    const ownedInSub = album.filter(s => s.country === subName && s.qty >= 1).length;
+                    const totalInSub = album.filter(s => s.country === subName).length;
+
+                    const idKey = `g-${gIdx}-s-${sIdx}`;
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-950/40 rounded-xl border border-slate-800 overflow-hidden";
+                    card.innerHTML = `
+                        <button onclick="toggleAccordion('${idKey}')" class="w-full flex justify-between items-center p-3 bg-slate-950/60 hover:bg-slate-950 font-bold text-sm text-slate-300">
+                            <span>🏳️‍🌈 ${subName} <span class="text-xs ml-2 text-slate-500">(${ownedInSub}/${totalInSub})</span></span>
+                            <svg id="icon-${idKey}" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="content-${idKey}" class="p-3 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-10 gap-2">
+                            ${subStickers.map(s => {
+                                let bg = "bg-slate-900 text-slate-500 border-slate-800";
+                                let badge = "";
+                                if (s.qty === 1) bg = "bg-emerald-600 text-white border-emerald-400 shadow-md";
+                                if (s.qty > 1) {
+                                    bg = "bg-indigo-600 text-white border-indigo-400 shadow-lg";
+                                    badge = `<span class="absolute -top-1 -right-1 bg-amber-400 text-slate-950 text-[9px] px-1 font-black rounded font-mono">+${s.qty - 1}</span>`;
+                                }
+                                return `
+                                    <div onclick="adjustQty('${s.id}', 1)" oncontextmenu="event.preventDefault(); adjustQty('${s.id}', -1)"
+                                         class="sticker-card aspect-square relative flex flex-col items-center justify-center rounded-lg font-bold text-xs p-1 cursor-pointer border active:scale-95 ${bg}">
+                                        ${badge}
+                                        <span class="text-[11px] font-black text-center leading-tight px-0.5">${s.displayNum}</span>
+                                        <span class="text-[7px] opacity-50 text-center truncate w-full mt-0.5">${s.type}</span>
+                                        ${s.qty > 0 ? `<div onclick="event.stopPropagation(); adjustQty('${s.id}', -1)" class="absolute bottom-0.5 right-1 text-[9px] bg-black/40 w-3.5 h-3.5 flex items-center justify-center rounded-full border border-white/10">-</div>` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                    sectionsContainer.appendChild(card);
+                });
+
+                groupBlock.appendChild(sectionsContainer);
+                container.appendChild(groupBlock);
+            });
+            updateStats();
+        }
+
+        function adjustQty(id, change) {
+            const s = album.find(x => x.id === id);
+            if (s) { s.qty = Math.max(0, s.qty + change); saveAlbum(); renderAlbum(); }
+        }
+
+        window.toggleAccordion = function(id) {
+            document.getElementById('content-' + id).classList.toggle('hidden');
+            document.getElementById('icon-' + id).classList.toggle('rotate-180');
+        }
+
+        window.handleSearch = function() { searchQuery = document.getElementById('search-input').value; renderAlbum(); }
+        window.setFilter = function(f) {
+            currentFilter = f;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+            document.getElementById(`btn-${f}`).classList.add('bg-blue-600', 'text-white');
+            renderAlbum();
+        }
+
+        window.shareMissing = function() {
+            let text = "📋 *MIS FALTANTES (Mundial 2026)* 🏆\n\n";
+            tournamentGroups.forEach(g => {
+                const missing = album.filter(s => s.groupName === g.name && s.qty === 0);
+                if (missing.length > 0) {
+                    text += `*🔹 ${g.name}*:\n`;
+                    const subCats = [...new Set(missing.map(s => s.country))];
+                    subCats.forEach(sub => {
+                        const items = missing.filter(s => s.country === sub).map(s => s.displayNum);
+                        text += `   • ${sub}: ${items.join(', ')}\n`;
+                    });
+                    text += "\n";
+                }
+            });
+            navigator.clipboard.writeText(text).then(() => alert("¡Faltantes copiados!"));
+        }
+
+        window.shareRepeated = function() {
+            let text = "🔄 *MIS REPETIDAS (Mundial 2026)* ⚽\n\n";
+            tournamentGroups.forEach(g => {
+                const reps = album.filter(s => s.groupName === g.name && s.qty > 1);
+                if (reps.length > 0) {
+                    text += `*🔸 ${g.name}*:\n`;
+                    const subCats = [...new Set(reps.map(s => s.country))];
+                    subCats.forEach(sub => {
+                        const items = reps.filter(s => s.country === sub).map(s => `${s.displayNum} (x${s.qty - 1})`);
+                        text += `   • ${sub}: ${items.join(', ')}\n`;
+                    });
+                    text += "\n";
+                }
+            });
+            navigator.clipboard.writeText(text).then(() => alert("¡Repetidas copiadas!"));
+        }
+
+        window.exportBackup = function() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(album));
+            const dl = document.createElement('a'); dl.setAttribute("href", dataStr); dl.setAttribute("download", "respaldo_album.json"); dl.click();
+        }
+
+        window.importBackup = function(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    album = JSON.parse(evt.target.result); saveAlbum(); renderAlbum(); alert("¡Datos cargados con éxito!");
+                } catch { alert("Archivo inválido"); }
+            };
+            reader.readAsText(file);
+        }
+
+        initAlbum();
+        renderAlbum();
+    </script>
+</body>
+</html>

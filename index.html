@@ -79,10 +79,9 @@
     </main>
 
     <script>
-        // Clave única global para evitar que se pisen los datos en celulares externos
-        const STORAGE_KEY = 'album_mundial_2026_global_v3';
+        // Nueva versión de la llave para asegurar que limpie errores previos en caché
+        const STORAGE_KEY = 'album_mundial_2026_global_v5';
 
-        // Estructura oficial con nombres de países y sus siglas correspondientes
         const tournamentGroups = [
             { name: "Sección Inicial ✨", isSpecial: true, parts: [
                 { id: "00", list: ["00"] },
@@ -116,7 +115,7 @@
                 { name: "France", code: "FRA" }, { name: "Senegal", code: "SEN" }, { name: "Iraq", code: "IRQ" }, { name: "Norway", code: "NOR" }
             ]},
             { name: "Grupo J", teams: [
-                { name: "Argentina", code: "ARG" }, { name: "Algeria", code: "ALG" }, { name: "Austria", code: "AUT" }, { name: "Jordan", code: "JOR" }
+                { name: "Argentina", code: "ARG" }, { name: "Algeria", code: "ALG" }, { name: "Ukraine", code: "UKR" }, { name: "Jordan", code: "JOR" }
             ]},
             { name: "Grupo K", teams: [
                 { name: "Portugal", code: "POR" }, { name: "Congo DR", code: "COD" }, { name: "Uzbekistan", code: "UZB" }, { name: "Colombia", code: "COL" }
@@ -161,7 +160,7 @@
                                 if (i === 1) {
                                     displayLabel = "🛡️ Escudo";
                                     type = "🛡️ Escudo";
-                                } else if (i === 20) {
+                                } else if (i === 13) {
                                     displayLabel = `${team.code} 13`;
                                     type = "✨ Extra";
                                 }
@@ -276,8 +275,10 @@
         }
 
         window.toggleAccordion = function(id) {
-            document.getElementById('content-' + id).classList.toggle('hidden');
-            document.getElementById('icon-' + id).classList.toggle('rotate-180');
+            const el = document.getElementById('content-' + id);
+            const icon = document.getElementById('icon-' + id);
+            if(el) el.classList.toggle('hidden');
+            if(icon) icon.classList.toggle('rotate-180');
         }
 
         window.handleSearch = function() { searchQuery = document.getElementById('search-input').value; renderAlbum(); }

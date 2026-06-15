@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Álbum Mundial 2026 🏆 Pro Tracker</title>
+    <title>Super Álbum Mundial 2026 🏆 Pro Tracker & Memory Game</title>
     
-    <!-- CÓDIGO DE VERIFICACIÓN Y PUBLICIDAD DE GOOGLE ADSENSE -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3922889648301106" crossorigin="anonymous"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,19 +14,22 @@
     <style>
         .sticker-card { transition: all 0.15s ease-in-out; }
         body { transition: background-color 0.3s ease, color 0.3s ease; }
-        /* Efectos especiales para cromos premium */
         .shield-effect { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important; border-color: #fbbf24 !important; color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
         .special-effect { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%) !important; border-color: #f472b6 !important; color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+        
+        .medal-unlocked { animation: medalGlow 2s infinite alternate; filter: grayscale(0) !important; opacity: 1 !important; }
+        @keyframes medalGlow {
+            0% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.4); border-color: #f59e0b; }
+            100% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.8); border-color: #fbbf24; }
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-24 dark">
 
-    <!-- BOTÓN FLOTANTE MODO CLARO/OSCURO -->
     <button onclick="toggleTheme()" class="fixed bottom-6 right-6 z-50 bg-amber-400 dark:bg-slate-800 text-slate-950 dark:text-amber-400 p-3.5 rounded-full shadow-2xl border-2 border-slate-950 dark:border-amber-400 font-bold text-lg hover:scale-110 transition active:scale-95">
         <span id="theme-icon">☀️</span>
     </button>
 
-    <!-- HEADER / DASHBOARD PRINCIPAL -->
     <header class="bg-gradient-to-r from-indigo-950 via-blue-900 to-slate-950 text-white shadow-2xl sticky top-0 z-40 border-b border-blue-800/40">
         <div class="max-w-5xl mx-auto px-4 py-4">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
@@ -73,12 +75,70 @@
         </div>
     </header>
 
-    <!-- CONTENEDOR DE ANUNCIOS ADSENSE REORGANIZADO -->
+    <section class="max-w-5xl mx-auto px-4 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="bg-gradient-to-br from-indigo-950 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-indigo-400">🆔 Perfil Coleccionista</h3>
+                    <span id="profile-rank-badge" class="bg-blue-500/20 border border-blue-500/40 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Pateador Novato 🥚</span>
+                </div>
+                <div class="space-y-2 text-xs mb-3">
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Tu Nombre / Apodo:</label>
+                        <input type="text" id="profile-name" oninput="saveProfileData()" placeholder="Escribe tu alias..." class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-3 py-1.5 text-white outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Tu Selección Favorita:</label>
+                        <input type="text" id="profile-fav" oninput="saveProfileData()" placeholder="Ej: México, Argentina..." class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-3 py-1.5 text-white outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+                <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-2 flex justify-between items-center text-xs">
+                    <span class="text-slate-400 font-bold uppercase text-[10px]">✨ Puntos de Juego:</span>
+                    <span id="profile-trivia-points" class="font-black text-amber-400 text-sm">0 pts</span>
+                </div>
+            </div>
+            <button onclick="shareProfileCard()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 rounded-xl mt-4 transition shadow-md flex items-center justify-center gap-1.5">
+                📸 Compartir Mi Perfil en Redes
+            </button>
+        </div>
+
+        <div class="lg:grid-cols-1 lg:col-span-2 bg-slate-950/40 border border-slate-800 rounded-2xl p-4 flex flex-col">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xs font-black uppercase tracking-wider text-amber-400">🏅 Tus Medallas Nacionales (<span id="unlocked-medals-count">0</span>/46)</h3>
+                <p class="text-[10px] text-slate-400">¡Completa el 100% de un país para encender su medalla!</p>
+            </div>
+            <div id="medals-grid" class="grid grid-cols-3 sm:grid-cols-6 gap-2 max-h-36 overflow-y-auto pr-1 text-center text-[10px] font-bold">
+                </div>
+        </div>
+    </section>
+
+    <section class="max-w-5xl mx-auto px-4 mt-4">
+        <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 border-2 border-indigo-500/40 rounded-2xl p-4 shadow-xl">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-indigo-500/20 pb-3 mb-4 gap-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">🧩</span>
+                    <div>
+                        <h3 class="text-xs font-black uppercase tracking-wider text-indigo-400">Minijuego: Memoria de Escudos</h3>
+                        <p class="text-[10px] text-slate-400">Encuentra las parejas de tus escudos registrados. ¡Suma puntos de rango!</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 text-xs font-bold">
+                    <span id="memory-stats" class="text-slate-400 text-[10px] uppercase">Intentos: <span id="memory-clicks" class="text-white">0</span></span>
+                    <button onclick="startMemoryGame()" class="text-[10px] bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-xl transition shadow-md font-black uppercase tracking-wider">🔄 Mezclar y Jugar</button>
+                </div>
+            </div>
+
+            <div id="memory-board" class="grid grid-cols-4 gap-2 max-w-md mx-auto min-h-[160px] items-center justify-center">
+                </div>
+            
+            <p id="memory-feedback" class="text-center text-xs font-black text-emerald-400 mt-3"></p>
+        </div>
+    </section>
+
     <div class="max-w-5xl mx-auto px-4 mt-4">
         <div class="bg-slate-200 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-2 text-center text-[10px] text-slate-400 tracking-widest uppercase">
             Anuncio Publicitario
             <div class="min-h-[60px] flex items-center justify-center text-slate-500 font-bold">
-                <!-- Bloque inyectado por AdSense -->
                 <ins class="adsbygoogle"
                      style="display:block"
                      data-ad-client="ca-pub-3922889648301106"
@@ -92,7 +152,6 @@
         </div>
     </div>
 
-    <!-- SECCIÓN DE ANÁLISIS E INTERCAMBIO INTELIGENTE -->
     <section class="max-w-5xl mx-auto px-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <details class="bg-slate-200 dark:bg-slate-800/40 border border-slate-300 dark:border-slate-800 rounded-xl overflow-hidden text-xs">
             <summary class="p-3 font-bold text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-300/40 dark:hover:bg-slate-950/40 transition">
@@ -110,15 +169,14 @@
                 👥 Escáner de Intercambio Inmediato (Match Automático)
             </summary>
             <div class="p-4 border-t border-slate-300 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/30 space-y-2">
-                <p class="text-slate-500 text-[11px]">Pega aquí la lista de repetidas que te mandó tu amigo por mensaje de texto o WhatsApp:</p>
-                <textarea id="friend-reps-input" rows="2" placeholder="Ej: Mexico: 13, Escudo, 4. Brasil: 2, 5, 10..." class="w-full p-2 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-800 rounded-xl focus:outline-none text-[11px] font-mono"></textarea>
+                <p class="text-slate-500 text-[11px]">Pega aquí la lista de repetidas de tu amigo:</p>
+                <textarea id="friend-reps-input" rows="2" placeholder="Ej: Mexico: 13, Escudo... Brasil: 2, 5..." class="w-full p-2 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-800 rounded-xl focus:outline-none text-[11px] font-mono"></textarea>
                 <button onclick="checkMatchIntercambio()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl transition text-[11px]">⚡ Escanear Qué Cromos Me Sirven</button>
                 <div id="match-results" class="hidden p-2.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-[11px] font-bold max-h-24 overflow-y-auto"></div>
             </div>
         </details>
     </section>
 
-    <!-- FILTROS Y BUSCADOR -->
     <main class="max-w-5xl mx-auto px-4 mt-4">
         <div class="bg-slate-200 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-300 dark:border-slate-700/60 shadow-xl mb-4 space-y-3">
             <div class="relative">
@@ -141,74 +199,38 @@
             </div>
         </div>
 
-        <!-- CONTENEDOR DE GRUPOS Y SECCIONES -->
         <div id="countries-container" class="space-y-4">
-            <!-- Inyección dinámica ultrarrápida -->
-        </div>
+            </div>
     </main>
 
-    <!-- SECCIÓN DE COMPRAS: AFILIADOS DE CONFIANZA -->
     <section class="max-w-5xl mx-auto px-4 mt-8 mb-12">
         <div class="bg-gradient-to-r from-amber-950 via-slate-900 to-slate-950 border-2 border-amber-500/40 rounded-2xl p-6 shadow-2xl">
             <div class="flex items-center gap-3 mb-4">
                 <span class="text-2xl">🛒</span>
                 <div>
                     <h3 class="text-sm font-black uppercase text-amber-400 tracking-wider">¿Te faltan cromos? ¡Completa tu Álbum Oficial!</h3>
-                    <p class="text-[11px] text-slate-400">Compra material 100% original de forma segura a través de nuestros enlaces autorizados</p>
+                    <p class="text-[11px] text-slate-400">Compra material 100% original de forma segura</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                <!-- Tarjeta 1: Pack Inicial -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-amber-500/30 transition shadow-lg">
-                    <div>
-                        <span class="text-[10px] font-bold text-yellow-400 block mb-1">🏆 PACK INICIAL</span>
-                        <h4 class="text-xs font-black text-white">Álbum Oficial + Sobres Panini</h4>
-                        <p class="text-[10px] text-slate-400 mt-1">La combinación perfecta para arrancar tu colección con el pie derecho.</p>
-                    </div>
-                    <a href="https://meli.la/1G7HNwo" target="_blank" class="block text-center bg-[#fff159] hover:bg-[#ebe04d] text-slate-950 font-bold text-[11px] py-2.5 rounded-xl mt-4 transition shadow font-sans">
-                        Ver en Mercado Libre ➔
-                    </a>
+                    <div><span class="text-[10px] font-bold text-yellow-400 block mb-1">🏆 PACK INICIAL</span><h4 class="text-xs font-black text-white">Álbum Oficial + Sobres</h4></div>
+                    <a href="https://meli.la/1G7HNwo" target="_blank" class="block text-center bg-[#fff159] hover:bg-[#ebe04d] text-slate-950 font-bold text-[11px] py-2.5 rounded-xl mt-4 transition font-sans">Ver en Mercado Libre ➔</a>
                 </div>
-
-                <!-- Tarjeta 2: Caja Grande -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-amber-500/30 transition shadow-lg">
-                    <div>
-                        <span class="text-[10px] font-bold text-amber-500 block mb-1">📦 CAJA COMPLETA</span>
-                        <h4 class="text-xs font-black text-white">Display de 50 Sobres (350 Láminas)</h4>
-                        <p class="text-[10px] text-slate-400 mt-1">Ideal para avanzar masivamente y conseguir hologramas difíciles.</p>
-                    </div>
-                    <a href="https://meli.la/16g2bRo" target="_blank" class="block text-center bg-[#fff159] hover:bg-[#ebe04d] text-slate-950 font-bold text-[11px] py-2.5 rounded-xl mt-4 transition shadow font-sans">
-                        Ver en Mercado Libre ➔
-                    </a>
+                    <div><span class="text-[10px] font-bold text-amber-500 block mb-1">📦 CAJA COMPLETA</span><h4 class="text-xs font-black text-white">Display de 50 Sobres</h4></div>
+                    <a href="https://meli.la/16g2bRo" target="_blank" class="block text-center bg-[#fff159] hover:bg-[#ebe04d] text-slate-950 font-bold text-[11px] py-2.5 rounded-xl mt-4 transition font-sans">Ver en Mercado Libre ➔</a>
                 </div>
-
-                <!-- Tarjeta 3: Pack Económico -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-amber-500/30 transition shadow-lg">
-                    <div>
-                        <span class="text-[10px] font-bold text-emerald-400 block mb-1">⚡ IMPULSO RÁPIDO</span>
-                        <h4 class="text-xs font-black text-white">Pack de 5 Sobres Oficiales</h4>
-                        <p class="text-[10px] text-slate-400 mt-1">¿Te faltan pocas? Un empujón económico para buscar tus faltantes.</p>
-                    </div>
-                    <a href="https://meli.la/2GTc7z5" target="_blank" class="block text-center bg-[#fff159] hover:bg-[#ebe04d] text-slate-950 font-bold text-[11px] py-2.5 rounded-xl mt-4 transition shadow font-sans">
-                        Ver en Mercado Libre ➔
-                    </a>
+                    <div><span class="text-[10px] font-bold text-emerald-400 block mb-1">⚡ IMPULSO RÁPIDO</span><h4 class="text-xs font-black text-white">Pack de 5 Sobres Oficiales</h4></div>
+                    <a href="https://meli.la/2GTc7z5" target="_blank" class="block text-center bg-[#fff159] hover:bg-[#ebe04d] text-slate-950 font-bold text-[11px] py-2.5 rounded-xl mt-4 transition font-sans">Ver en Mercado Libre ➔</a>
                 </div>
-
-                <!-- Tarjeta 4: Distribución Amazon -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-amber-500/30 transition shadow-lg">
-                    <div>
-                        <span class="text-[10px] font-bold text-orange-400 block mb-1">✈️ ENVÍO INTERNACIONAL</span>
-                        <h4 class="text-xs font-black text-white">Material Oficial Mundial 2026</h4>
-                        <p class="text-[10px] text-slate-400 mt-1">Revisa el catálogo de ofertas y stock global directamente en Amazon.</p>
-                    </div>
+                    <div><span class="text-[10px] font-bold text-orange-400 block mb-1">✈️ ENVÍO GLOBAL</span><h4 class="text-xs font-black text-white">Catálogo en Amazon</h4></div>
                     <div class="grid grid-cols-2 gap-1.5 mt-4">
-                        <a href="https://amzn.to/49WOMWV" target="_blank" class="block text-center bg-[#ff9900] hover:bg-[#e68a00] text-slate-950 font-bold text-[9px] py-2 rounded-lg transition shadow">
-                            Opción 1 ➔
-                        </a>
-                        <a href="https://amzn.to/4xtVy0e" target="_blank" class="block text-center bg-[#ff9900] hover:bg-[#e68a00] text-slate-950 font-bold text-[9px] py-2 rounded-lg transition shadow">
-                            Opción 2 ➔
-                        </a>
+                        <a href="https://amzn.to/49WOMWV" target="_blank" class="block text-center bg-[#ff9900] hover:bg-[#e68a00] text-slate-950 font-bold text-[9px] py-2 rounded-lg transition shadow">Opción 1</a>
+                        <a href="https://amzn.to/4xtVy0e" target="_blank" class="block text-center bg-[#ff9900] hover:bg-[#e68a00] text-slate-950 font-bold text-[9px] py-2 rounded-lg transition shadow">Opción 2</a>
                     </div>
                 </div>
             </div>
@@ -223,60 +245,71 @@
                 { id: "00", list: ["00"] },
                 { id: "FWC", list: Array.from({length: 19}, (_, i) => `FWC ${i + 1}`) }
             ]},
-            { name: "Grupo A", teams: [
-                { name: "Mexico", code: "MEX" }, { name: "South Africa", code: "RSA" }, { name: "Korea Republic", code: "KOR" }, { name: "Czechia", code: "CZE" }
-            ]},
-            { name: "Grupo B", teams: [
-                { name: "Canada", code: "CAN" }, { name: "Bosnia", code: "BIH" }, { name: "Qatar", code: "QAT" }, { name: "Switzerland", code: "SUI" }
-            ]},
-            { name: "Grupo C", teams: [
-                { name: "Brasil", code: "BRA" }, { name: "Morocco", code: "MAR" }, { name: "Haiti", code: "HAI" }, { name: "Scotland", code: "SCO" }
-            ]},
-            { name: "Grupo D", teams: [
-                { name: "USA", code: "USA" }, { name: "Paraguay", code: "PAR" }, { name: "Austria", code: "AUT" }, { name: "Turkiye", code: "TUR" }
-            ]},
-            { name: "Grupo E", teams: [
-                { name: "Germany", code: "GER" }, { name: "Curaçao", code: "CUW" }, { name: "Cote d Ivoire", code: "CIV" }, { name: "Ecuador", code: "ECU" }
-            ]},
-            { name: "Grupo F", teams: [
-                { name: "Netherlands", code: "NED" }, { name: "Japan", code: "JPN" }, { name: "Sweden", code: "SWE" }, { name: "Tunisia", code: "TUN" }
-            ]},
-            { name: "Grupo G", teams: [
-                { name: "Belgium", code: "BEL" }, { name: "Egypt", code: "EGY" }, { name: "IR Iran", code: "IRN" }, { name: "New Zealand", code: "NZL" }
-            ]},
-            { name: "Grupo H", teams: [
-                { name: "Spain", code: "ESP" }, { name: "Cabo Verde", code: "CPV" }, { name: "Saudi Arabia", code: "KSA" }, { name: "Uruguay", code: "URU" }
-            ]},
-            { name: "Grupo I", teams: [
-                { name: "France", code: "FRA" }, { name: "Senegal", code: "SEN" }, { name: "Iraq", code: "IRQ" }, { name: "Norway", code: "NOR" }
-            ]},
-            { name: "Grupo J", teams: [
-                { name: "Argentina", code: "ARG" }, { name: "Algeria", code: "ALG" }, { name: "Austria", code: "AUT" }, { name: "Jordan", code: "JOR" }
-            ]},
-            { name: "Grupo K", teams: [
-                { name: "Portugal", code: "POR" }, { name: "Congo DR", code: "COD" }, { name: "Uzbekistan", code: "UZB" }, { name: "Colombia", code: "COL" }
-            ]},
-            { name: "Grupo L", teams: [
-                { name: "England", code: "ENG" }, { name: "Croatia", code: "CRO" }, { name: "Ghana", code: "GHA" }, { name: "Panama", code: "PAN" }
-            ]},
+            { name: "Grupo A", teams: [{ name: "Mexico", code: "MEX" }, { name: "South Africa", code: "RSA" }, { name: "Korea Republic", code: "KOR" }, { name: "Czechia", code: "CZE" }]},
+            { name: "Grupo B", teams: [{ name: "Canada", code: "CAN" }, { name: "Bosnia", code: "BIH" }, { name: "Qatar", code: "QAT" }, { name: "Switzerland", code: "SUI" }]},
+            { name: "Grupo C", teams: [{ name: "Brasil", code: "BRA" }, { name: "Morocco", code: "MAR" }, { name: "Haiti", code: "HAI" }, { name: "Scotland", code: "SCO" }]},
+            { name: "Grupo D", teams: [{ name: "USA", code: "USA" }, { name: "Paraguay", code: "PAR" }, { name: "Australia", code: "AUS" }, { name: "Turkiye", code: "TUR" }]},
+            { name: "Grupo E", teams: [{ name: "Germany", code: "GER" }, { name: "Curaçao", code: "CUW" }, { name: "Cote d Ivoire", code: "CIV" }, { name: "Ecuador", code: "ECU" }]},
+            { name: "Grupo F", teams: [{ name: "Netherlands", code: "NED" }, { name: "Japan", code: "JPN" }, { name: "SWE", code: "SWE" }, { name: "Tunisia", code: "TUN" }]},
+            { name: "Grupo G", teams: [{ name: "Belgium", code: "BEL" }, { name: "Egypt", code: "EGY" }, { name: "IR Iran", code: "IRN" }, { name: "New Zealand", code: "NZL" }]},
+            { name: "Grupo H", teams: [{ name: "Spain", code: "ESP" }, { name: "Cabo Verde", code: "CPV" }, { name: "Saudi Arabia", code: "KSA" }, { name: "Uruguay", code: "URU" }]},
+            { name: "Grupo I", teams: [{ name: "France", code: "FRA" }, { name: "Senegal", code: "SEN" }, { name: "Iraq", code: "IRQ" }, { name: "Norway", code: "NOR" }]},
+            { name: "Grupo J", teams: [{ name: "Argentina", code: "ARG" }, { name: "Algeria", code: "ALG" }, { name: "Austria", code: "AUT" }, { name: "Jordan", code: "JOR" }]},
+            { name: "Grupo K", teams: [{ name: "Portugal", code: "POR" }, { name: "Congo DR", code: "COD" }, { name: "Uzbekistan", code: "UZB" }, { name: "Colombia", code: "COL" }]},
+            { name: "Grupo L", teams: [{ name: "England", code: "ENG" }, { name: "Croatia", code: "CRO" }, { name: "Ghana", code: "GHA" }, { name: "Panama", code: "PAN" }]},
             { name: "Sección Final 🥤", isSpecial: true, parts: [
                 { id: "Coca-Cola", list: Array.from({length: 14}, (_, i) => `CC ${i + 1}`) }
             ]}
         ];
 
+        const medalDictionary = {
+            "00": { name: "Puntapié Inicial 🌟", icon: "✨" }, "FWC": { name: "Historia FWC 🏆", icon: "🏺" },
+            "Mexico": { name: "Águila Azteca 🦅", icon: "💚" }, "South Africa": { name: "Poder Bafana 🇿🇦", icon: "🎷" },
+            "Korea Republic": { name: "Tigres de Asia 🐯", icon: "🏮" }, "Czechia": { name: "León de Bohemia 🦁", icon: "🏰" },
+            "Canada": { name: "Hoja de Maple 🍁", icon: "❄️" }, "Bosnia": { name: "Dragones Azules 🐉", icon: "🛡️" },
+            "Qatar": { name: "Furia del Desierto 🇶🇦", icon: "🦅" }, "Switzerland": { name: "Reloj Suizo 🇨🇭", icon: "⚙️" },
+            "Brasil": { name: "Rey de la Samba 🇧🇷", icon: "👑" }, "Morocco": { name: "Leones del Atlas 🇲🇦", icon: "🦁" },
+            "Haiti": { name: "Fuerza Caribeña 🇭🇹", icon: "🌴" }, "Scotland": { name: "Orgullo Celta 🏴󠁧󠁢󠁳󠁣󠁴󠁿", icon: "⚔️" },
+            "USA": { name: "Barras y Estrellas 🇺🇸", icon: "🦅" }, "Paraguay": { name: "Garra Guaraní 🇵🇾", icon: "🏹" },
+            "Australia": { name: "Socceroos Dorados 🦘", icon: "🇦🇺" }, "Turkiye": { name: "Sultanes del Gol 🇹🇷", icon: "🌙" },
+            "Germany": { name: "Máquina Mannschaft 🇩🇪", icon: "⚙️" }, "Curaçao": { name: "Magia del Caribe 🇨🇼", icon: "🏝️" },
+            "Cote d Ivoire": { name: "Elefantes de Ébano 🇨🇮", icon: "🐘" }, "Ecuador": { name: "La Tri de Fuego 🇪🇨", icon: "🌋" },
+            "Netherlands": { name: "Naranja Mecánica 🇳🇱", icon: "🌷" }, "Japan": { name: "Orgullo Samurái 🇯🇵", icon: "⚔️" },
+            "SWE": { name: "Poder Vikingo 🇸🇪", icon: "🛡️" }, "Tunisia": { name: "Águilas de Cartago 🇹🇳", icon: "🏛️" },
+            "Belgium": { name: "Diablos Rojos 🇧🇪", icon: "🔱" }, "Egypt": { name: "Faraones del Gol 🇪🇬", icon: "📐" },
+            "IR Iran": { name: "Príncipes Persas 🇮🇷", icon: "🐆" }, "New Zealand": { name: "Fuerza Kiwi 🇳🇿", icon: "🌿" },
+            "Spain": { name: "Furia Roja 🇪🇸", icon: "🐂" }, "Cabo Verde": { name: "Tiburones Azules 🇨🇻", icon: "🦈" },
+            "Saudi Arabia": { name: "Halcones Verdes 🇸🇦", icon: "🌴" }, "Uruguay": { name: "Garra Charrúa 🇺🇾", icon: "☀️" },
+            "France": { name: "Gallo de Oro 🇫🇷", icon: "🐓" }, "Senegal": { name: "Leones de Teranga 🇸🇪", icon: "🦁" },
+            "Iraq": { name: "Leones de Mesopotamia 🇮🇶", icon: "🌴" }, "Norway": { name: "Trueno del Norte 🇳🇴", icon: "⚡" },
+            "Argentina": { name: "La Tercera y Más 🌟", icon: "🔟" }, "Algeria": { name: "Zorros del Desierto 🇩🇿", icon: "🦊" },
+            "Austria": { name: "Vals del Triunfo 🇦🇹", icon: "🎻" }, "Jordan": { name: "Caballeros de Amán 🇯🇴", icon: "🏰" },
+            "Portugal": { name: "Comandantes Lusos 🇵🇹", icon: "🛡️" }, "Congo DR": { name: "Leopardos del Congo 🇨🇩", icon: "🐆" },
+            "Uzbekistan": { name: "Lupinos de Taskent 🇺🇿", icon: "🐺" }, "Colombia": { name: "Fiebre Amarilla 🇨🇴", icon: "☕" },
+            "England": { name: "Tres Leones 🏴󠁧󠁢󠁥󠁮󠁧󠁿", icon: "🦁" }, "Croatia": { name: "Ajedrez de Fuego 🇭🇷", icon: "🛡️" },
+            "Ghana": { name: "Estrellas Negras 🇬🇭", icon: "⭐" }, "Panama": { name: "Canaleros del Gol 🇵🇦", icon: "🚢" },
+            "Coca-Cola": { name: "Sabor de la Victoria 🥤", icon: "🔥" }
+        };
+
         let album = [];
         let currentFilter = 'todos';
         let searchQuery = '';
         let openAccordions = {};
+        let triviaPoints = parseInt(localStorage.getItem('trivia_points')) || 0;
+
+        // Variables de control del juego de memoria
+        let memoryCards = [];
+        let flippedCards = [];
+        let lockBoard = false;
+        let memoryAttempts = 0;
+        let matchesFound = 0;
 
         function playClickSound(isRemove = false) {
             try {
                 if (navigator.vibrate) navigator.vibrate(isRemove ? 25 : 12);
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(isRemove ? 180 : 520, ctx.currentTime);
+                const osc = ctx.createOscillator(); const gain = ctx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(isRemove ? 180 : 520, ctx.currentTime);
                 gain.gain.setValueAtTime(0.04, ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.08);
                 osc.connect(gain); gain.connect(ctx.destination);
@@ -300,15 +333,25 @@
         function initAlbum() {
             const jumper = document.getElementById('group-jumper');
             tournamentGroups.forEach(g => {
-                const opt = document.createElement('option');
-                opt.value = g.name; opt.innerText = g.name; jumper.appendChild(opt);
+                const opt = document.createElement('option'); opt.value = g.name; opt.innerText = g.name; jumper.appendChild(opt);
             });
             checkAndMigrateKeys();
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 album = JSON.parse(saved);
-                album.forEach(s => { if(s.id.includes("'") || s.id.includes("%27")) s.id = s.id.replace(/[^a-zA-Z0-9-]/g, ""); });
+                album.forEach(s => {
+                    if(s.id.includes("'") || s.id.includes("%27")) s.id = s.id.replace(/[^a-zA-Z0-9-]/g, "");
+                });
+                const hasOldData = album.some(s => s.country === "Por Definir");
+                if(hasOldData) { forceResetData(); } else { saveAlbum(); }
             } else { forceResetData(); }
+            
+            document.getElementById('profile-name').value = localStorage.getItem('profile_name') || '';
+            document.getElementById('profile-fav').value = localStorage.getItem('profile_fav') || '';
+            document.getElementById('profile-trivia-points').innerText = `${triviaPoints} pts`;
+            
+            // Lanzamos el minijuego de memoria al iniciar
+            startMemoryGame();
         }
 
         function forceResetData() {
@@ -337,11 +380,129 @@
 
         function saveAlbum() { localStorage.setItem(STORAGE_KEY, JSON.stringify(album)); }
 
+        window.saveProfileData = function() {
+            localStorage.setItem('profile_name', document.getElementById('profile-name').value);
+            localStorage.setItem('profile_fav', document.getElementById('profile-fav').value);
+        }
+
+        // ================= LÓGICA DEL MINIJUEGO DE MEMORIA =================
+        window.startMemoryGame = function() {
+            const board = document.getElementById('memory-board');
+            const feedback = document.getElementById('memory-feedback');
+            feedback.innerText = "";
+            memoryAttempts = 0;
+            matchesFound = 0;
+            flippedCards = [];
+            lockBoard = false;
+            document.getElementById('memory-clicks').innerText = "0";
+
+            // 1. Filtrar solo los escudos que el usuario ya marcó que posee (qty > 0)
+            let userShields = album.filter(s => s.type === "🛡️ Escudo" && s.qty > 0);
+
+            // 2. Fallback: Si tiene menos de 4 escudos reales, agregamos especiales/extras que ya tenga pegados
+            if (userShields.length < 4) {
+                const backups = album.filter(s => (s.type === "⭐ Especial" || s.type === "✨ Extra") && s.qty > 0);
+                userShields = [...userShields, ...backups];
+            }
+            
+            // 3. Fallback crítico: Si el álbum está complemente vacío, usamos los primeros 4 del sistema temporalmente
+            if (userShields.length < 4) {
+                userShields = album.filter(s => s.type === "🛡️ Escudo").slice(0, 4);
+            }
+
+            // 4. Barajar la piscina disponible y elegir exactamente 4 cartas base
+            const shuffledPool = userShields.sort(() => 0.5 - Math.random());
+            const selectedItems = shuffledPool.slice(0, 4);
+
+            // 5. Duplicar elementos para formar las parejas (8 cartas totales) y barajarlas al azar absoluto
+            memoryCards = [...selectedItems, ...selectedItems]
+                .map((item, index) => ({ ...item, uniqueId: index }))
+                .sort(() => 0.5 - Math.random());
+
+            // 6. Dibujar las cartas boca abajo en la interfaz
+            board.innerHTML = '';
+            memoryCards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.dataset.id = card.id;
+                cardEl.dataset.uniqueId = card.uniqueId;
+                cardEl.className = "aspect-square bg-slate-950 border-2 border-indigo-500/40 rounded-xl flex items-center justify-center cursor-pointer text-xl font-bold transition transform active:scale-95 text-indigo-400 select-none hover:border-indigo-400";
+                cardEl.innerText = "❓";
+                cardEl.onclick = () => flipCard(cardEl, card);
+                board.appendChild(cardEl);
+            });
+        }
+
+        function flipCard(cardEl, cardData) {
+            if (lockBoard) return;
+            if (cardEl.classList.contains('matched')) return;
+            // Evitar hacer click doble en la misma carta exacta ya volteada
+            if (flippedCards.length === 1 && flippedCards[0].el.dataset.uniqueId === cardEl.dataset.uniqueId) return;
+
+            // Mostrar contenido del frente
+            cardEl.innerText = cardData.displayNum.replace("🛡️ ", "");
+            cardEl.className = "aspect-square bg-indigo-950 border-2 border-amber-400 rounded-xl flex flex-col items-center justify-center text-[10px] font-black text-amber-400 select-none text-center p-1";
+            
+            if (cardData.type === "🛡️ Escudo") cardEl.classList.add('shield-effect');
+            if (cardData.type === "✨ Extra" || cardData.type === "⭐ Especial") cardEl.classList.add('special-effect');
+
+            flippedCards.push({ el: cardEl, data: cardData });
+
+            if (flippedCards.length === 2) {
+                memoryAttempts++;
+                document.getElementById('memory-clicks').innerText = memoryAttempts;
+                checkMemoryMatch();
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [card1, card2] = flippedCards;
+            const isMatch = card1.data.id === card2.data.id;
+
+            if (isMatch) {
+                card1.el.classList.add('matched');
+                card2.el.classList.add('matched');
+                flippedCards = [];
+                matchesFound++;
+
+                if (matchesFound === 4) {
+                    // Premiación basada en la eficiencia de intentos
+                    const pointsGained = Math.max(10, 60 - memoryAttempts);
+                    triviaPoints += pointsGained;
+                    localStorage.setItem('trivia_points', triviaPoints);
+                    document.getElementById('profile-trivia-points').innerText = `${triviaPoints} pts`;
+                    document.getElementById('memory-feedback').innerText = `🎉 ¡Victoria! Completado en ${memoryAttempts} intentos. Ganaste +${pointsGained} pts de rango.`;
+                    updateStats();
+                }
+            } else {
+                lockBoard = true;
+                setTimeout(() => {
+                    card1.el.innerText = "❓";
+                    card1.el.className = "aspect-square bg-slate-950 border-2 border-indigo-500/40 rounded-xl flex items-center justify-center cursor-pointer text-xl font-bold transition transform active:scale-95 text-indigo-400 select-none hover:border-indigo-400";
+                    card1.el.classList.remove('shield-effect', 'special-effect');
+                    
+                    card2.el.innerText = "❓";
+                    card2.el.className = "aspect-square bg-slate-950 border-2 border-indigo-500/40 rounded-xl flex items-center justify-center cursor-pointer text-xl font-bold transition transform active:scale-95 text-indigo-400 select-none hover:border-indigo-400";
+                    card2.el.classList.remove('shield-effect', 'special-effect');
+
+                    flippedCards = [];
+                    lockBoard = false;
+                }, 900);
+            }
+        }
+        // ===================================================================
+
+        function calculateRank(pct) {
+            const bonusRank = Math.floor(triviaPoints / 150);
+            if (pct === 100) return "Leyenda Mundialista 🏆";
+            if (pct >= 76 || bonusRank >= 4) return "Maestro del Álbum 🔥";
+            if (pct >= 51 || bonusRank >= 2) return "Coleccionista de Élite 🥇";
+            if (pct >= 26 || bonusRank >= 1) return "Cazador de Cromos 🗂️";
+            return "Pateador Novato 🥚";
+        }
+
         function updateStats() {
-            const total = album.length;
-            const owned = album.filter(s => s.qty >= 1).length;
-            const missing = total - owned;
-            let repeated = 0; album.forEach(s => { if (s.qty > 1) repeated += (s.qty - 1); });
+            const total = album.length; const owned = album.filter(s => s.qty >= 1).length;
+            const missing = total - owned; let repeated = 0; album.forEach(s => { if (s.qty > 1) repeated += (s.qty - 1); });
             const pct = total > 0 ? ((owned / total) * 100).toFixed(1) : 0;
 
             document.getElementById('stat-owned').innerText = owned;
@@ -349,6 +510,8 @@
             document.getElementById('stat-repeated').innerText = repeated;
             document.getElementById('stat-pct').innerText = `${pct}%`;
             document.getElementById('progress-bar').style.width = `${pct}%`;
+
+            document.getElementById('profile-rank-badge').innerText = calculateRank(parseFloat(pct));
 
             let bestGroup = "Ninguno", maxPct = -1;
             tournamentGroups.forEach(g => {
@@ -360,37 +523,66 @@
             document.getElementById('adv-best-group').innerText = `${bestGroup} (${maxPct.toFixed(0)}%)`;
 
             const shields = album.filter(s => s.type === "🛡️ Escudo");
-            const shieldsOwned = shields.filter(s => s.qty >= 1).length;
-            document.getElementById('adv-shields').innerText = `${shieldsOwned}/${shields.length}`;
-
+            document.getElementById('adv-shields').innerText = `${shields.filter(s => s.qty >= 1).length}/${shields.length}`;
             const specials = album.filter(s => s.type === "✨ Extra" || s.type === "⭐ Especial");
-            const specialsOwned = specials.filter(s => s.qty >= 1).length;
-            document.getElementById('adv-specials').innerText = `${specialsOwned}/${specials.length}`;
+            document.getElementById('adv-specials').innerText = `${specials.filter(s => s.qty >= 1).length}/${specials.length}`;
+
+            renderMedals();
+        }
+
+        function renderMedals() {
+            const grid = document.getElementById('medals-grid');
+            grid.innerHTML = '';
+            const uniqueCountries = [...new Set(album.map(s => s.country))];
+            let unlockedCount = 0;
+
+            uniqueCountries.forEach(country => {
+                const totalInCountry = album.filter(s => s.country === country).length;
+                const ownedInCountry = album.filter(s => s.country === country && s.qty >= 1).length;
+                const isCompleted = totalInCountry > 0 && totalInCountry === ownedInCountry;
+                
+                const meta = medalDictionary[country] || { name: `Héroe de ${country}`, icon: "🏳️‍🌈" };
+                if (isCompleted) unlockedCount++;
+
+                const medalBox = document.createElement('div');
+                medalBox.className = `p-2 bg-slate-900 border border-slate-800 rounded-xl flex flex-col items-center justify-center transition-all ${isCompleted ? 'medal-unlocked text-amber-400 bg-amber-950/20' : 'opacity-25 grayscale'}`;
+                medalBox.innerHTML = `
+                    <span class="text-base">${meta.icon}</span>
+                    <span class="truncate w-full block mt-0.5 text-[8px] tracking-tight leading-none">${meta.name}</span>
+                `;
+                grid.appendChild(medalBox);
+            });
+            document.getElementById('unlocked-medals-count').innerText = unlockedCount;
+        }
+
+        window.shareProfileCard = function() {
+            const name = document.getElementById('profile-name').value || 'Coleccionista Anónimo';
+            const fav = document.getElementById('profile-fav').value || 'El Deporte';
+            const pct = document.getElementById('stat-pct').innerText;
+            const rank = document.getElementById('profile-rank-badge').innerText;
+            const repes = document.getElementById('stat-repeated').innerText;
+            const medallas = document.getElementById('unlocked-medals-count').innerText;
+
+            const shareText = `🏆 *TARJETA DE PERFIL: MUNDIAL 2026 PRO* ⚽\n\n👤 *Usuario:* ${name}\n🛡️ *Mi Selección:* ${fav}\n📊 *Progreso General:* ${pct}\n🧠 *Puntos Logrados:* ${triviaPoints} pts\n🎖️ *Rango Actual:* ${rank}\n🏅 *Medallas Desbloqueadas:* ${medallas}/46\n🔄 *Repetidas:* ${repes}\n\n¡Escaneemos juntos qué cromos nos sirven de inmediato! ⚡`;
+            navigator.clipboard.writeText(shareText).then(() => alert("📸 ¡Resumen copiado para tus redes sociales!"));
         }
 
         function matchesSearch(s, query) {
-            if (!query) return true;
-            const q = query.toLowerCase().trim();
+            if (!query) return true; const q = query.toLowerCase().trim();
             const rangeMatch = q.match(/^([a-z\s]+)\s+(\d+)-(\d+)$/);
             if (rangeMatch) {
-                const searchCountry = rangeMatch[1].trim();
-                const startNum = parseInt(rangeMatch[2]);
-                const endNum = parseInt(rangeMatch[3]);
-                const countryText = s.country.toLowerCase();
-                const idText = s.id.toLowerCase();
-                const matchesCountry = countryText.includes(searchCountry) || idText.includes(searchCountry);
+                const searchCountry = rangeMatch[1].trim(); const startNum = parseInt(rangeMatch[2]); const endNum = parseInt(rangeMatch[3]);
+                const matchesCountry = s.country.toLowerCase().includes(searchCountry) || s.id.toLowerCase().includes(searchCountry);
                 const numExtract = s.displayNum.match(/\d+/);
                 if (numExtract && matchesCountry) {
-                    const currentNum = parseInt(numExtract[0]);
-                    return currentNum >= startNum && currentNum <= endNum;
+                    const currentNum = parseInt(numExtract[0]); return currentNum >= startNum && currentNum <= endNum;
                 }
             }
             return s.id.toLowerCase().includes(q) || s.country.toLowerCase().includes(q) || s.groupName.toLowerCase().includes(q) || s.displayNum.toLowerCase().includes(q);
         }
 
         function renderAlbum() {
-            const container = document.getElementById('countries-container');
-            container.innerHTML = '';
+            const container = document.getElementById('countries-container'); container.innerHTML = '';
 
             tournamentGroups.forEach((group, gIdx) => {
                 const groupStickers = album.filter(s => s.groupName === group.name);
@@ -410,9 +602,7 @@
                 groupBlock.className = "bg-white dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-300 dark:border-slate-700/50 shadow-sm";
                 groupBlock.innerHTML = `<h2 class="text-sm font-black text-blue-700 dark:text-amber-400 mb-3 tracking-wide uppercase border-b border-slate-200 dark:border-slate-700/60 pb-1">📍 ${group.name}</h2>`;
 
-                const sectionsContainer = document.createElement('div');
-                sectionsContainer.className = "space-y-2.5";
-
+                const sectionsContainer = document.createElement('div'); sectionsContainer.className = "space-y-2.5";
                 const subCategories = [...new Set(visibleStickers.map(s => s.country))];
 
                 subCategories.forEach((subName, sIdx) => {
@@ -420,9 +610,7 @@
                     const ownedInSub = album.filter(s => s.country === subName && s.qty >= 1).length;
                     const totalInSub = album.filter(s => s.country === subName).length;
 
-                    const idKey = `g-${gIdx}-s-${sIdx}`;
-                    const isHidden = openAccordions[idKey] ? '' : 'hidden';
-                    const iconRotate = openAccordions[idKey] ? 'rotate-180' : '';
+                    const idKey = `g-${gIdx}-s-${sIdx}`; const isHidden = openAccordions[idKey] ? '' : 'hidden'; const iconRotate = openAccordions[idKey] ? 'rotate-180' : '';
 
                     const card = document.createElement('div');
                     card.className = "bg-slate-100 dark:bg-slate-950/40 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden";
@@ -445,9 +633,7 @@
                                     if (s.type === "🛡️ Escudo") premiumClass = "shield-effect";
                                     if (s.type === "✨ Extra" || s.type === "⭐ Especial") premiumClass = "special-effect";
                                 }
-
                                 const badge = s.qty > 1 ? `<span class="absolute -top-1 -right-1 bg-amber-400 text-slate-950 text-[9px] px-1 font-black rounded shadow">+${s.qty - 1}</span>` : '';
-                                
                                 return `
                                     <div onclick="adjustQty('${s.id}', 1)" oncontextmenu="event.preventDefault(); adjustQty('${s.id}', -1)"
                                          class="sticker-card aspect-square relative flex flex-col items-center justify-center rounded-lg font-bold text-[11px] p-1 cursor-pointer border active:scale-95 ${bg} ${premiumClass}">
@@ -462,9 +648,7 @@
                     `;
                     sectionsContainer.appendChild(card);
                 });
-
-                groupBlock.appendChild(sectionsContainer);
-                container.appendChild(groupBlock);
+                groupBlock.appendChild(sectionsContainer); container.appendChild(groupBlock);
             });
             updateStats();
         }
@@ -473,17 +657,15 @@
             const s = album.find(x => x.id === id);
             if (s) { 
                 s.qty = Math.max(0, s.qty + change); 
-                playClickSound(change < 0); saveAlbum(); renderAlbum(); 
+                playClickSound(change < 0); 
+                saveAlbum(); 
+                renderAlbum();
             }
         }
 
         window.toggleAccordion = function(id) {
-            const el = document.getElementById('content-' + id);
-            const icon = document.getElementById('icon-' + id);
-            if(el) {
-                const isHidden = el.classList.toggle('hidden');
-                openAccordions[id] = !isHidden;
-            }
+            const el = document.getElementById('content-' + id); const icon = document.getElementById('icon-' + id);
+            if(el) { const isHidden = el.classList.toggle('hidden'); openAccordions[id] = !isHidden; }
             if(icon) icon.classList.toggle('rotate-180');
         }
 
@@ -494,10 +676,8 @@
         }
         
         window.setFilter = function(f) {
-            currentFilter = f;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
-            document.getElementById(`btn-${f}`).classList.add('bg-blue-600', 'text-white');
-            renderAlbum();
+            currentFilter = f; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+            document.getElementById(`btn-${f}`).classList.add('bg-blue-600', 'text-white'); renderAlbum();
         }
 
         window.jumpToSection = function() {
@@ -507,36 +687,29 @@
         }
 
         window.toggleTheme = function() {
-            const isDark = document.body.classList.toggle('dark');
-            document.getElementById('theme-icon').innerText = isDark ? "☀️" : "🌙";
+            const isDark = document.body.classList.toggle('dark'); document.getElementById('theme-icon').innerText = isDark ? "☀️" : "🌙";
         }
 
         window.checkMatchIntercambio = function() {
             const rawText = document.getElementById('friend-reps-input').value.toLowerCase();
-            const resultsDiv = document.getElementById('match-results');
-            if(!rawText.trim()) { alert("Por favor pega algo de texto primero"); return; }
+            const resultsDiv = document.getElementById('match-results'); if(!rawText.trim()) { alert("Por favor pega algo de texto primero"); return; }
 
-            const missing = album.filter(s => s.qty === 0);
-            let matchesEncontrados = [];
-
+            const missing = album.filter(s => s.qty === 0); let matchesEncontrados = [];
             missing.forEach(s => {
                 const cleanLabel = s.displayNum.toLowerCase().replace("🛡️ ", "").replace("✨ ", "");
                 if(rawText.includes(cleanLabel) && (rawText.includes(s.country.toLowerCase()) || rawText.includes(s.id.split('-')[0].toLowerCase()))) {
                     matchesEncontrados.push(`${s.country}: ${s.displayNum}`);
                 }
             });
-
             resultsDiv.classList.remove('hidden');
             if(matchesEncontrados.length > 0) {
                 resultsDiv.innerHTML = `🎉 ¡Te sirven estos ${matchesEncontrados.length} cromos!: <br><span class="text-white">${matchesEncontrados.join(' | ')}</span>`;
-            } else {
-                resultsDiv.innerHTML = "❌ Ninguno de los cromos de esa lista coincide con tus faltantes actuales.";
-            }
+            } else { resultsDiv.innerHTML = "❌ Ninguno coincide con tus faltantes actuales."; }
         }
 
         window.dangerReset = function() {
             const confirmWord = prompt("⚠️ ALERTA: Esto borrará tu progreso local. Para confirmar escribe REINICIAR:");
-            if(confirmWord === "REINICIAR") { forceResetData(); renderAlbum(); alert("Álbum puesto a cero."); }
+            if(confirmWord === "REINICIAR") { triviaPoints = 0; localStorage.setItem('trivia_points', 0); forceResetData(); renderAlbum(); startMemoryGame(); alert("Álbum puesto a cero."); }
         }
 
         window.shareMissing = function() {
@@ -544,8 +717,7 @@
             tournamentGroups.forEach(g => {
                 const missing = album.filter(s => s.groupName === g.name && s.qty === 0);
                 if (missing.length > 0) {
-                    text += `*🔹 ${g.name}*:\n`;
-                    const subCats = [...new Set(missing.map(s => s.country))];
+                    text += `*🔹 ${g.name}*:\n`; const subCats = [...new Set(missing.map(s => s.country))];
                     subCats.forEach(sub => {
                         const items = missing.filter(s => s.country === sub).map(s => s.displayNum);
                         text += `   • ${sub}: ${items.join(', ')}\n`;
@@ -560,8 +732,7 @@
             tournamentGroups.forEach(g => {
                 const reps = album.filter(s => s.groupName === g.name && s.qty > 1);
                 if (reps.length > 0) {
-                    text += `*🔸 ${g.name}*:\n`;
-                    const subCats = [...new Set(reps.map(s => s.country))];
+                    text += `*🔸 ${g.name}*:\n`; const subCats = [...new Set(reps.map(s => s.country))];
                     subCats.forEach(sub => {
                         const items = reps.filter(s => s.country === sub).map(s => `${s.displayNum} (x${s.qty - 1})`);
                         text += `   • ${sub}: ${items.join(', ')}\n`;
@@ -572,10 +743,8 @@
         }
 
         window.exportBackup = function() {
-            const dataStr = JSON.stringify(album, null, 2);
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const dl = document.createElement('a'); dl.href = url; dl.download = "respaldo_album_2026.json";
+            const dataStr = JSON.stringify(album, null, 2); const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob); const dl = document.createElement('a'); dl.href = url; dl.download = "respaldo_album_2026.json";
             document.body.appendChild(dl); dl.click(); document.body.removeChild(dl); URL.revokeObjectURL(url);
         }
 
@@ -583,11 +752,8 @@
             const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = function(evt) {
-                try {
-                    album = JSON.parse(evt.target.result); saveAlbum(); renderAlbum(); alert("¡Progreso cargado con éxito! 🏆");
-                } catch { alert("Archivo inválido"); }
-            };
-            reader.readAsText(file);
+                try { album = JSON.parse(evt.target.result); saveAlbum(); renderAlbum(); startMemoryGame(); alert("¡Progreso cargado con éxito! 🏆"); } catch { alert("Archivo inválido"); }
+            }; reader.readAsText(file);
         }
 
         initAlbum();

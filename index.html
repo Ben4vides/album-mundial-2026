@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Álbum Mundial 2026 🏆 Pro Tracker & Memory Game</title>
     
+    <!-- CÓDIGO DE VERIFICACIÓN Y PUBLICIDAD DE GOOGLE ADSENSE -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3922889648301106" crossorigin="anonymous"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,7 +15,7 @@
     <style>
         .sticker-card { transition: all 0.15s ease-in-out; }
         body { transition: background-color 0.3s ease, color 0.3s ease; }
-        .shield-effect { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important; border-color: #fbbf24 !important; color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+        .shield-effect { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important; border-color: #fbbf24 !important; color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.6); box-shadow: inset 0 0 10px rgba(255,255,255,0.3); }
         .special-effect { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%) !important; border-color: #f472b6 !important; color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
         
         .medal-unlocked { animation: medalGlow 2s infinite alternate; filter: grayscale(0) !important; opacity: 1 !important; }
@@ -26,10 +27,12 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen pb-24 dark">
 
+    <!-- BOTÓN FLOTANTE MODO CLARO/OSCURO -->
     <button onclick="toggleTheme()" class="fixed bottom-6 right-6 z-50 bg-amber-400 dark:bg-slate-800 text-slate-950 dark:text-amber-400 p-3.5 rounded-full shadow-2xl border-2 border-slate-950 dark:border-amber-400 font-bold text-lg hover:scale-110 transition active:scale-95">
         <span id="theme-icon">☀️</span>
     </button>
 
+    <!-- HEADER / DASHBOARD PRINCIPAL -->
     <header class="bg-gradient-to-r from-indigo-950 via-blue-900 to-slate-950 text-white shadow-2xl sticky top-0 z-40 border-b border-blue-800/40">
         <div class="max-w-5xl mx-auto px-4 py-4">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
@@ -75,7 +78,9 @@
         </div>
     </header>
 
+    <!-- ZONA GAMIFICADA: TARJETA DE PERFIL Y MEDALLERO -->
     <section class="max-w-5xl mx-auto px-4 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Tarjeta de Perfil -->
         <div class="bg-gradient-to-br from-indigo-950 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 shadow-xl flex flex-col justify-between">
             <div>
                 <div class="flex items-center justify-between mb-3">
@@ -102,16 +107,19 @@
             </button>
         </div>
 
+        <!-- Medallero -->
         <div class="lg:grid-cols-1 lg:col-span-2 bg-slate-950/40 border border-slate-800 rounded-2xl p-4 flex flex-col">
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-xs font-black uppercase tracking-wider text-amber-400">🏅 Tus Medallas Nacionales (<span id="unlocked-medals-count">0</span>/46)</h3>
                 <p class="text-[10px] text-slate-400">¡Completa el 100% de un país para encender su medalla!</p>
             </div>
             <div id="medals-grid" class="grid grid-cols-3 sm:grid-cols-6 gap-2 max-h-36 overflow-y-auto pr-1 text-center text-[10px] font-bold">
-                </div>
+                <!-- JS -->
+            </div>
         </div>
     </section>
 
+    <!-- MINIJUEGO: MEMORIA DE ESCUDOS REGISTRADOS -->
     <section class="max-w-5xl mx-auto px-4 mt-4">
         <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 border-2 border-indigo-500/40 rounded-2xl p-4 shadow-xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-indigo-500/20 pb-3 mb-4 gap-2">
@@ -129,12 +137,14 @@
             </div>
 
             <div id="memory-board" class="grid grid-cols-4 gap-2 max-w-md mx-auto min-h-[160px] items-center justify-center">
-                </div>
+                <!-- JS -->
+            </div>
             
             <p id="memory-feedback" class="text-center text-xs font-black text-emerald-400 mt-3"></p>
         </div>
     </section>
 
+    <!-- PUBLICIDAD -->
     <div class="max-w-5xl mx-auto px-4 mt-4">
         <div class="bg-slate-200 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-2 text-center text-[10px] text-slate-400 tracking-widest uppercase">
             Anuncio Publicitario
@@ -152,6 +162,7 @@
         </div>
     </div>
 
+    <!-- ANÁLISIS E INTERCAMBIO -->
     <section class="max-w-5xl mx-auto px-4 mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <details class="bg-slate-200 dark:bg-slate-800/40 border border-slate-300 dark:border-slate-800 rounded-xl overflow-hidden text-xs">
             <summary class="p-3 font-bold text-slate-700 dark:text-slate-300 cursor-pointer hover:bg-slate-300/40 dark:hover:bg-slate-950/40 transition">
@@ -177,6 +188,7 @@
         </details>
     </section>
 
+    <!-- FILTROS Y BUSCADOR -->
     <main class="max-w-5xl mx-auto px-4 mt-4">
         <div class="bg-slate-200 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-300 dark:border-slate-700/60 shadow-xl mb-4 space-y-3">
             <div class="relative">
@@ -200,9 +212,11 @@
         </div>
 
         <div id="countries-container" class="space-y-4">
-            </div>
+            <!-- JS -->
+        </div>
     </main>
 
+    <!-- AFILIADOS -->
     <section class="max-w-5xl mx-auto px-4 mt-8 mb-12">
         <div class="bg-gradient-to-r from-amber-950 via-slate-900 to-slate-950 border-2 border-amber-500/40 rounded-2xl p-6 shadow-2xl">
             <div class="flex items-center gap-3 mb-4">
@@ -245,18 +259,18 @@
                 { id: "00", list: ["00"] },
                 { id: "FWC", list: Array.from({length: 19}, (_, i) => `FWC ${i + 1}`) }
             ]},
-            { name: "Grupo A", teams: [{ name: "Mexico", code: "MEX" }, { name: "South Africa", code: "RSA" }, { name: "Korea Republic", code: "KOR" }, { name: "Czechia", code: "CZE" }]},
-            { name: "Grupo B", teams: [{ name: "Canada", code: "CAN" }, { name: "Bosnia", code: "BIH" }, { name: "Qatar", code: "QAT" }, { name: "Switzerland", code: "SUI" }]},
-            { name: "Grupo C", teams: [{ name: "Brasil", code: "BRA" }, { name: "Morocco", code: "MAR" }, { name: "Haiti", code: "HAI" }, { name: "Scotland", code: "SCO" }]},
-            { name: "Grupo D", teams: [{ name: "USA", code: "USA" }, { name: "Paraguay", code: "PAR" }, { name: "Australia", code: "AUS" }, { name: "Turkiye", code: "TUR" }]},
-            { name: "Grupo E", teams: [{ name: "Germany", code: "GER" }, { name: "Curaçao", code: "CUW" }, { name: "Cote d Ivoire", code: "CIV" }, { name: "Ecuador", code: "ECU" }]},
-            { name: "Grupo F", teams: [{ name: "Netherlands", code: "NED" }, { name: "Japan", code: "JPN" }, { name: "SWE", code: "SWE" }, { name: "Tunisia", code: "TUN" }]},
-            { name: "Grupo G", teams: [{ name: "Belgium", code: "BEL" }, { name: "Egypt", code: "EGY" }, { name: "IR Iran", code: "IRN" }, { name: "New Zealand", code: "NZL" }]},
-            { name: "Grupo H", teams: [{ name: "Spain", code: "ESP" }, { name: "Cabo Verde", code: "CPV" }, { name: "Saudi Arabia", code: "KSA" }, { name: "Uruguay", code: "URU" }]},
-            { name: "Grupo I", teams: [{ name: "France", code: "FRA" }, { name: "Senegal", code: "SEN" }, { name: "Iraq", code: "IRQ" }, { name: "Norway", code: "NOR" }]},
-            { name: "Grupo J", teams: [{ name: "Argentina", code: "ARG" }, { name: "Algeria", code: "ALG" }, { name: "Austria", code: "AUT" }, { name: "Jordan", code: "JOR" }]},
-            { name: "Grupo K", teams: [{ name: "Portugal", code: "POR" }, { name: "Congo DR", code: "COD" }, { name: "Uzbekistan", code: "UZB" }, { name: "Colombia", code: "COL" }]},
-            { name: "Grupo L", teams: [{ name: "England", code: "ENG" }, { name: "Croatia", code: "CRO" }, { name: "Ghana", code: "GHA" }, { name: "Panama", code: "PAN" }]},
+            { name: "Grupo A", teams: [{ name: "Mexico", code: "MEX", flag: "🇲🇽" }, { name: "South Africa", code: "RSA", flag: "🇿🇦" }, { name: "Korea Republic", code: "KOR", flag: "🇰🇷" }, { name: "Czechia", code: "CZE", flag: "🇨🇿" }]},
+            { name: "Grupo B", teams: [{ name: "Canada", code: "CAN", flag: "🇨🇦" }, { name: "Bosnia", code: "BIH", flag: "🇧🇦" }, { name: "Qatar", code: "QAT", flag: "🇶🇦" }, { name: "Switzerland", code: "SUI", flag: "🇨🇭" }]},
+            { name: "Grupo C", teams: [{ name: "Brasil", code: "BRA", flag: "🇧🇷" }, { name: "Morocco", code: "MAR", flag: "🇲🇦" }, { name: "Haiti", code: "HAI", flag: "🇭🇹" }, { name: "Scotland", code: "SCO", flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿" }]},
+            { name: "Grupo D", teams: [{ name: "USA", code: "USA", flag: "🇺🇸" }, { name: "Paraguay", code: "PAR", flag: "🇵🇾" }, { name: "Australia", code: "AUS", flag: "🇦🇺" }, { name: "Turkiye", code: "TUR", flag: "🇹🇷" }]},
+            { name: "Grupo E", teams: [{ name: "Germany", code: "GER", flag: "🇩🇪" }, { name: "Curaçao", code: "CUW", flag: "🇨🇼" }, { name: "Cote d Ivoire", code: "CIV", flag: "🇨🇮" }, { name: "Ecuador", code: "ECU", flag: "🇪🇨" }]},
+            { name: "Grupo F", teams: [{ name: "Netherlands", code: "NED", flag: "🇳🇱" }, { name: "Japan", code: "JPN", flag: "🇯🇵" }, { name: "SWE", code: "SWE", flag: "🇸🇪" }, { name: "Tunisia", code: "TUN", flag: "🇹🇳" }]},
+            { name: "Grupo G", teams: [{ name: "Belgium", code: "BEL", flag: "🇧🇪" }, { name: "Egypt", code: "EGY", flag: "🇪🇬" }, { name: "IR Iran", code: "IRN", flag: "🇮🇷" }, { name: "New Zealand", code: "NZL", flag: "🇳🇿" }]},
+            { name: "Grupo H", teams: [{ name: "Spain", code: "ESP", flag: "🇪🇸" }, { name: "Cabo Verde", code: "CPV", flag: "🇨🇻" }, { name: "Saudi Arabia", code: "KSA", flag: "🇸🇦" }, { name: "Uruguay", code: "URU", flag: "🇺🇾" }]},
+            { name: "Grupo I", teams: [{ name: "France", code: "FRA", flag: "🇫🇷" }, { name: "Senegal", code: "SEN", flag: "🇸🇳" }, { name: "Iraq", code: "IRQ", flag: "🇮🇶" }, { name: "Norway", code: "NOR", flag: "🇳🇴" }]},
+            { name: "Grupo J", teams: [{ name: "Argentina", code: "ARG", flag: "🇦🇷" }, { name: "Algeria", code: "ALG", flag: "🇩🇿" }, { name: "Austria", code: "AUT", flag: "🇦🇹" }, { name: "Jordan", code: "JOR", flag: "🇯🇴" }]},
+            { name: "Grupo K", teams: [{ name: "Portugal", code: "POR", flag: "🇵🇹" }, { name: "Congo DR", code: "COD", flag: "🇨🇩" }, { name: "Uzbekistan", code: "UZB", flag: "🇺🇿" }, { name: "Colombia", code: "COL", flag: "🇨🇴" }]},
+            { name: "Grupo L", teams: [{ name: "England", code: "ENG", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }, { name: "Croatia", code: "CRO", flag: "🇭🇷" }, { name: "Ghana", code: "GHA", flag: "🇬🇭" }, { name: "Panama", code: "PAN", flag: "🇵🇦" }]},
             { name: "Sección Final 🥤", isSpecial: true, parts: [
                 { id: "Coca-Cola", list: Array.from({length: 14}, (_, i) => `CC ${i + 1}`) }
             ]}
@@ -264,30 +278,30 @@
 
         const medalDictionary = {
             "00": { name: "Puntapié Inicial 🌟", icon: "✨" }, "FWC": { name: "Historia FWC 🏆", icon: "🏺" },
-            "Mexico": { name: "Águila Azteca 🦅", icon: "💚" }, "South Africa": { name: "Poder Bafana 🇿🇦", icon: "🎷" },
-            "Korea Republic": { name: "Tigres de Asia 🐯", icon: "🏮" }, "Czechia": { name: "León de Bohemia 🦁", icon: "🏰" },
-            "Canada": { name: "Hoja de Maple 🍁", icon: "❄️" }, "Bosnia": { name: "Dragones Azules 🐉", icon: "🛡️" },
-            "Qatar": { name: "Furia del Desierto 🇶🇦", icon: "🦅" }, "Switzerland": { name: "Reloj Suizo 🇨🇭", icon: "⚙️" },
-            "Brasil": { name: "Rey de la Samba 🇧🇷", icon: "👑" }, "Morocco": { name: "Leones del Atlas 🇲🇦", icon: "🦁" },
-            "Haiti": { name: "Fuerza Caribeña 🇭🇹", icon: "🌴" }, "Scotland": { name: "Orgullo Celta 🏴󠁧󠁢󠁳󠁣󠁴󠁿", icon: "⚔️" },
-            "USA": { name: "Barras y Estrellas 🇺🇸", icon: "🦅" }, "Paraguay": { name: "Garra Guaraní 🇵🇾", icon: "🏹" },
-            "Australia": { name: "Socceroos Dorados 🦘", icon: "🇦🇺" }, "Turkiye": { name: "Sultanes del Gol 🇹🇷", icon: "🌙" },
-            "Germany": { name: "Máquina Mannschaft 🇩🇪", icon: "⚙️" }, "Curaçao": { name: "Magia del Caribe 🇨🇼", icon: "🏝️" },
-            "Cote d Ivoire": { name: "Elefantes de Ébano 🇨🇮", icon: "🐘" }, "Ecuador": { name: "La Tri de Fuego 🇪🇨", icon: "🌋" },
-            "Netherlands": { name: "Naranja Mecánica 🇳🇱", icon: "🌷" }, "Japan": { name: "Orgullo Samurái 🇯🇵", icon: "⚔️" },
-            "SWE": { name: "Poder Vikingo 🇸🇪", icon: "🛡️" }, "Tunisia": { name: "Águilas de Cartago 🇹🇳", icon: "🏛️" },
-            "Belgium": { name: "Diablos Rojos 🇧🇪", icon: "🔱" }, "Egypt": { name: "Faraones del Gol 🇪🇬", icon: "📐" },
-            "IR Iran": { name: "Príncipes Persas 🇮🇷", icon: "🐆" }, "New Zealand": { name: "Fuerza Kiwi 🇳🇿", icon: "🌿" },
-            "Spain": { name: "Furia Roja 🇪🇸", icon: "🐂" }, "Cabo Verde": { name: "Tiburones Azules 🇨🇻", icon: "🦈" },
-            "Saudi Arabia": { name: "Halcones Verdes 🇸🇦", icon: "🌴" }, "Uruguay": { name: "Garra Charrúa 🇺🇾", icon: "☀️" },
-            "France": { name: "Gallo de Oro 🇫🇷", icon: "🐓" }, "Senegal": { name: "Leones de Teranga 🇸🇪", icon: "🦁" },
-            "Iraq": { name: "Leones de Mesopotamia 🇮🇶", icon: "🌴" }, "Norway": { name: "Trueno del Norte 🇳🇴", icon: "⚡" },
-            "Argentina": { name: "La Tercera y Más 🌟", icon: "🔟" }, "Algeria": { name: "Zorros del Desierto 🇩🇿", icon: "🦊" },
-            "Austria": { name: "Vals del Triunfo 🇦🇹", icon: "🎻" }, "Jordan": { name: "Caballeros de Amán 🇯🇴", icon: "🏰" },
-            "Portugal": { name: "Comandantes Lusos 🇵🇹", icon: "🛡️" }, "Congo DR": { name: "Leopardos del Congo 🇨🇩", icon: "🐆" },
-            "Uzbekistan": { name: "Lupinos de Taskent 🇺🇿", icon: "🐺" }, "Colombia": { name: "Fiebre Amarilla 🇨🇴", icon: "☕" },
-            "England": { name: "Tres Leones 🏴󠁧󠁢󠁥󠁮󠁧󠁿", icon: "🦁" }, "Croatia": { name: "Ajedrez de Fuego 🇭🇷", icon: "🛡️" },
-            "Ghana": { name: "Estrellas Negras 🇬🇭", icon: "⭐" }, "Panama": { name: "Canaleros del Gol 🇵🇦", icon: "🚢" },
+            "Mexico": { name: "Águila Azteca 🦅", icon: "🇲🇽" }, "South Africa": { name: "Poder Bafana 🇿🇦", icon: "🇿🇦" },
+            "Korea Republic": { name: "Tigres de Asia 🐯", icon: "🇰🇷" }, "Czechia": { name: "León de Bohemia 🦁", icon: "🇨🇿" },
+            "Canada": { name: "Hoja de Maple 🍁", icon: "🇨🇦" }, "Bosnia": { name: "Dragones Azules 🐉", icon: "🇧🇦" },
+            "Qatar": { name: "Furia del Desierto 🇶🇦", icon: "🇶🇦" }, "Switzerland": { name: "Reloj Suizo 🇨🇭", icon: "🇨🇭" },
+            "Brasil": { name: "Rey de la Samba 🇧🇷", icon: "🇧🇷" }, "Morocco": { name: "Leones del Atlas 🇲🇦", icon: "🇲🇦" },
+            "Haiti": { name: "Fuerza Caribeña 🇭🇹", icon: "🇭🇹" }, "Scotland": { name: "Orgullo Celta 🏴󠁧󠁢󠁳󠁣󠁴󠁿", icon: "🏴󠁧󠁢󠁳󠁣󠁴󠁿" },
+            "USA": { name: "Barras y Estrellas 🇺🇸", icon: "🇺🇸" }, "Paraguay": { name: "Garra Guaraní 🇵🇾", icon: "🇵🇾" },
+            "Australia": { name: "Socceroos Dorados 🦘", icon: "🇦🇺" }, "Turkiye": { name: "Sultanes del Gol 🇹🇷", icon: "🇹🇷" },
+            "Germany": { name: "Máquina Mannschaft 🇩🇪", icon: "🇩🇪" }, "Curaçao": { name: "Magia del Caribe 🇨🇼", icon: "🇨🇼" },
+            "Cote d Ivoire": { name: "Elefantes de Ébano 🇨🇮", icon: "🇨🇮" }, "Ecuador": { name: "La Tri de Fuego 🇪🇨", icon: "🇪🇨" },
+            "Netherlands": { name: "Naranja Mecánica 🇳🇱", icon: "🇳🇱" }, "Japan": { name: "Orgullo Samurái 🇯🇵", icon: "🇯🇵" },
+            "SWE": { name: "Poder Vikingo 🇸🇪", icon: "🇸🇪" }, "Tunisia": { name: "Águilas de Cartago 🇹🇳", icon: "🇹🇳" },
+            "Belgium": { name: "Diablos Rojos 🇧🇪", icon: "🇧🇪" }, "Egypt": { name: "Faraones del Gol 🇪🇬", icon: "🇪🇬" },
+            "IR Iran": { name: "Príncipes Persas 🇮🇷", icon: "🇮🇷" }, "New Zealand": { name: "Fuerza Kiwi 🇳🇿", icon: "🇳🇿" },
+            "Spain": { name: "Furia Roja 🇪🇸", icon: "🇪🇸" }, "Cabo Verde": { name: "Tiburones Azules 🇨🇻", icon: "🇨🇻" },
+            "Saudi Arabia": { name: "Halcones Verdes 🇸🇦", icon: "🇸🇦" }, "Uruguay": { name: "Garra Charrúa 🇺🇾", icon: "🇺🇾" },
+            "France": { name: "Gallo de Oro 🇫🇷", icon: "🇫🇷" }, "Senegal": { name: "Leones de Teranga 🇸🇳", icon: "🇸🇳" },
+            "Iraq": { name: "Leones de Mesopotamia 🇮🇶", icon: "🇮🇶" }, "Norway": { name: "Trueno del Norte 🇳🇴", icon: "🇳🇴" },
+            "Argentina": { name: "La Tercera y Más 🌟", icon: "🇦🇷" }, "Algeria": { name: "Zorros del Desierto 🇩🇿", icon: "🇩🇿" },
+            "Austria": { name: "Vals del Triunfo 🇦🇹", icon: "🇦🇹" }, "Jordan": { name: "Caballeros de Amán 🇯🇴", icon: "🇯🇴" },
+            "Portugal": { name: "Comandantes Lusos 🇵🇹", icon: "🇵🇹" }, "Congo DR": { name: "Leopardos del Congo 🇨🇩", icon: "🇨🇩" },
+            "Uzbekistan": { name: "Lupinos de Taskent 🇺🇿", icon: "🇺🇿" }, "Colombia": { name: "Fiebre Amarilla 🇨🇴", icon: "🇨🇴" },
+            "England": { name: "Tres Leones 🏴󠁧󠁢󠁥󠁮󠁧󠁿", icon: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }, "Croatia": { name: "Ajedrez de Fuego 🇭🇷", icon: "🇭🇷" },
+            "Ghana": { name: "Estrellas Negras 🇬🇭", icon: "🇬🇭" }, "Panama": { name: "Canaleros del Gol 🇵🇦", icon: "🇵🇦" },
             "Coca-Cola": { name: "Sabor de la Victoria 🥤", icon: "🔥" }
         };
 
@@ -297,7 +311,6 @@
         let openAccordions = {};
         let triviaPoints = parseInt(localStorage.getItem('trivia_points')) || 0;
 
-        // Variables de control del juego de memoria
         let memoryCards = [];
         let flippedCards = [];
         let lockBoard = false;
@@ -318,9 +331,9 @@
         }
 
         function checkAndMigrateKeys() {
-            const oldKeys = ['album_mundial_2026_global_v6', 'album_mundial_2026_global_v7_ultimate', 'album_mundial_2026_global_final'];
             let activeBackup = localStorage.getItem(STORAGE_KEY);
             if (!activeBackup || JSON.parse(activeBackup).filter(s => s.qty > 0).length === 0) {
+                const oldKeys = ['album_mundial_2026_global_v6', 'album_mundial_2026_global_v7_ultimate', 'album_mundial_2026_global_final'];
                 for (let oldKey of oldKeys) {
                     const oldData = localStorage.getItem(oldKey);
                     if (oldData && JSON.parse(oldData).filter(s => s.qty > 0).length > 0) {
@@ -350,7 +363,6 @@
             document.getElementById('profile-fav').value = localStorage.getItem('profile_fav') || '';
             document.getElementById('profile-trivia-points').innerText = `${triviaPoints} pts`;
             
-            // Lanzamos el minijuego de memoria al iniciar
             startMemoryGame();
         }
 
@@ -385,7 +397,7 @@
             localStorage.setItem('profile_fav', document.getElementById('profile-fav').value);
         }
 
-        // ================= LÓGICA DEL MINIJUEGO DE MEMORIA =================
+        // ================= MINIJUEGO DE MEMORIA =================
         window.startMemoryGame = function() {
             const board = document.getElementById('memory-board');
             const feedback = document.getElementById('memory-feedback');
@@ -396,30 +408,24 @@
             lockBoard = false;
             document.getElementById('memory-clicks').innerText = "0";
 
-            // 1. Filtrar solo los escudos que el usuario ya marcó que posee (qty > 0)
             let userShields = album.filter(s => s.type === "🛡️ Escudo" && s.qty > 0);
 
-            // 2. Fallback: Si tiene menos de 4 escudos reales, agregamos especiales/extras que ya tenga pegados
             if (userShields.length < 4) {
                 const backups = album.filter(s => (s.type === "⭐ Especial" || s.type === "✨ Extra") && s.qty > 0);
                 userShields = [...userShields, ...backups];
             }
             
-            // 3. Fallback crítico: Si el álbum está complemente vacío, usamos los primeros 4 del sistema temporalmente
             if (userShields.length < 4) {
                 userShields = album.filter(s => s.type === "🛡️ Escudo").slice(0, 4);
             }
 
-            // 4. Barajar la piscina disponible y elegir exactamente 4 cartas base
             const shuffledPool = userShields.sort(() => 0.5 - Math.random());
             const selectedItems = shuffledPool.slice(0, 4);
 
-            // 5. Duplicar elementos para formar las parejas (8 cartas totales) y barajarlas al azar absoluto
             memoryCards = [...selectedItems, ...selectedItems]
                 .map((item, index) => ({ ...item, uniqueId: index }))
                 .sort(() => 0.5 - Math.random());
 
-            // 6. Dibujar las cartas boca abajo en la interfaz
             board.innerHTML = '';
             memoryCards.forEach(card => {
                 const cardEl = document.createElement('div');
@@ -435,11 +441,15 @@
         function flipCard(cardEl, cardData) {
             if (lockBoard) return;
             if (cardEl.classList.contains('matched')) return;
-            // Evitar hacer click doble en la misma carta exacta ya volteada
             if (flippedCards.length === 1 && flippedCards[0].el.dataset.uniqueId === cardEl.dataset.uniqueId) return;
 
-            // Mostrar contenido del frente
-            cardEl.innerText = cardData.displayNum.replace("🛡️ ", "");
+            // Al voltearse en el juego de memoria, muestra un emoji descriptivo de escudo o especial
+            if(cardData.type === "🛡️ Escudo") {
+                cardEl.innerHTML = `<span class="text-xs font-black">🛡️</span><span class="text-[8px] tracking-tighter block uppercase truncate w-full">${cardData.country}</span>`;
+            } else {
+                cardEl.innerText = cardData.displayNum;
+            }
+            
             cardEl.className = "aspect-square bg-indigo-950 border-2 border-amber-400 rounded-xl flex flex-col items-center justify-center text-[10px] font-black text-amber-400 select-none text-center p-1";
             
             if (cardData.type === "🛡️ Escudo") cardEl.classList.add('shield-effect');
@@ -465,7 +475,6 @@
                 matchesFound++;
 
                 if (matchesFound === 4) {
-                    // Premiación basada en la eficiencia de intentos
                     const pointsGained = Math.max(10, 60 - memoryAttempts);
                     triviaPoints += pointsGained;
                     localStorage.setItem('trivia_points', triviaPoints);
@@ -489,7 +498,6 @@
                 }, 900);
             }
         }
-        // ===================================================================
 
         function calculateRank(pct) {
             const bonusRank = Math.floor(triviaPoints / 150);
@@ -537,6 +545,7 @@
             let unlockedCount = 0;
 
             uniqueCountries.forEach(country => {
+                // CORRECCIÓN MEDALLAS: Filtra correctamente sumando todas las láminas (jugadores + escudo) de ese país específico
                 const totalInCountry = album.filter(s => s.country === country).length;
                 const ownedInCountry = album.filter(s => s.country === country && s.qty >= 1).length;
                 const isCompleted = totalInCountry > 0 && totalInCountry === ownedInCountry;
@@ -612,16 +621,27 @@
 
                     const idKey = `g-${gIdx}-s-${sIdx}`; const isHidden = openAccordions[idKey] ? '' : 'hidden'; const iconRotate = openAccordions[idKey] ? 'rotate-180' : '';
 
+                    // CORRECCIÓN VISUAL: Buscar si el país actual del bucle tiene una bandera asignada en la base de datos
+                    let flagIcon = "🏳️‍🌈";
+                    if (!group.isSpecial) {
+                        const teamData = group.teams.find(t => t.name === subName);
+                        if (teamData && teamData.flag) flagIcon = teamData.flag;
+                    } else {
+                        if (subName === "00" || subName === "FWC") flagIcon = "✨";
+                        if (subName === "Coca-Cola") flagIcon = "🥤";
+                    }
+
                     const card = document.createElement('div');
-                    card.className = "bg-slate-100 dark:bg-slate-950/40 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden";
+                    // CORRECCIÓN VISUAL: Reemplazado el fondo azul del acordeón por un fondo pizarra/oscuro neutral elegante
+                    card.className = "bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden";
                     card.innerHTML = `
-                        <button onclick="toggleAccordion('${idKey}')" class="w-full flex justify-between items-center p-2.5 bg-slate-200/60 dark:bg-slate-950/60 hover:bg-slate-300 dark:hover:bg-slate-950 font-bold text-xs text-slate-700 dark:text-slate-300 transition">
-                            <span>🏳️‍🌈 ${subName} <span class="text-[10px] ml-1.5 opacity-60">(${ownedInSub}/${totalInSub})</span></span>
+                        <button onclick="toggleAccordion('${idKey}')" class="w-full flex justify-between items-center p-2.5 bg-slate-200/50 dark:bg-slate-950/40 hover:bg-slate-300/50 dark:hover:bg-slate-950/80 font-bold text-xs text-slate-700 dark:text-slate-300 transition">
+                            <span class="flex items-center gap-2"><span>${flagIcon}</span> <span class="uppercase tracking-wider font-black text-[11px]">${subName}</span> <span class="text-[10px] opacity-60 font-medium">(${ownedInSub}/${totalInSub})</span></span>
                             <svg id="icon-${idKey}" class="w-3.5 h-3.5 transform transition-transform ${iconRotate}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <div id="content-${idKey}" class="${isHidden} p-3 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-10 gap-1.5">
                             ${subStickers.map(s => {
-                                let bg = "bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-800";
+                                let bg = "bg-white dark:bg-slate-950 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-800/60";
                                 if (s.qty === 1) bg = "bg-emerald-600 text-white border-emerald-400 shadow-sm";
                                 if (s.qty > 1) bg = "bg-indigo-600 text-white border-indigo-400 shadow-md";
                                 
@@ -633,13 +653,22 @@
                                     if (s.type === "🛡️ Escudo") premiumClass = "shield-effect";
                                     if (s.type === "✨ Extra" || s.type === "⭐ Especial") premiumClass = "special-effect";
                                 }
+                                
+                                // CORRECCIÓN VISUAL: Si el cromo es de tipo Escudo, se renderiza con un isotipo de escudo dinámico en vez de texto plano
+                                let innerLabel = s.displayNum;
+                                if(s.type === "🛡️ Escudo") {
+                                    innerLabel = `<span class="text-[14px] block filter drop-shadow">🛡️</span><span class="text-[9px] uppercase font-black tracking-tight mt-0.5">Escudo</span>`;
+                                } else {
+                                    innerLabel = `<span class="font-black text-center text-xs leading-tight px-0.5">${s.displayNum}</span>`;
+                                }
+
                                 const badge = s.qty > 1 ? `<span class="absolute -top-1 -right-1 bg-amber-400 text-slate-950 text-[9px] px-1 font-black rounded shadow">+${s.qty - 1}</span>` : '';
                                 return `
                                     <div onclick="adjustQty('${s.id}', 1)" oncontextmenu="event.preventDefault(); adjustQty('${s.id}', -1)"
-                                         class="sticker-card aspect-square relative flex flex-col items-center justify-center rounded-lg font-bold text-[11px] p-1 cursor-pointer border active:scale-95 ${bg} ${premiumClass}">
+                                         class="sticker-card aspect-square relative flex flex-col items-center justify-center rounded-lg font-bold p-1 cursor-pointer border active:scale-95 ${bg} ${premiumClass}">
                                         ${badge}
-                                        <span class="font-black text-center leading-tight px-0.5">${s.displayNum}</span>
-                                        <span class="text-[7px] opacity-50 text-center truncate w-full mt-0.5">${s.type}</span>
+                                        ${innerLabel}
+                                        <span class="text-[7px] opacity-40 text-center truncate w-full mt-0.5">${s.type === "🛡️ Escudo" ? "Oficial" : s.type}</span>
                                         ${s.qty > 0 ? `<div onclick="event.stopPropagation(); adjustQty('${s.id}', -1)" class="absolute bottom-0.5 right-1 text-[9px] bg-black/50 hover:bg-black w-4 h-4 flex items-center justify-center rounded-full text-white border border-white/10">-</div>` : ''}
                                     </div>
                                 `;
